@@ -1,0 +1,87 @@
+#!/usr/bin/ruby -w
+# test_pdfmult: unit tests for pdfmult script.
+
+# Marcus Stollsteimer, Dec 2011
+
+require 'test/unit'
+load 'pdfmult'
+
+PROGNAME    = 'test_pdfmult'
+PROGVERSION = '0.0.1'
+COPYRIGHT   = 'Copyright (C) 2011-2012 Marcus Stollsteimer.'
+
+
+class OptionparserTest < Test::Unit::TestCase
+
+  def test_defaults
+    options = Pdfmult::Optionparser.parse!(['sample.pdf'])
+    assert_equal(options[:infile], 'sample.pdf')
+    assert_equal(options[:outfile], 'sample_2.pdf')
+    assert_equal(options[:number], 2)
+    assert_equal(options[:pages], nil)
+  end
+
+  def test_number
+    options = Pdfmult::Optionparser.parse!(['sample.pdf', '-n', '4'])
+    assert_equal(options[:infile], 'sample.pdf')
+    assert_equal(options[:outfile], 'sample_4.pdf')
+    assert_equal(options[:number], 4)
+
+    assert_raises(OptionParser::InvalidArgument) { options = Pdfmult::Optionparser.parse!(['sample.pdf', '-n', '3']) }
+  end
+
+  def test_outfile
+    options = Pdfmult::Optionparser.parse!(['sample.pdf', '-o', 'outfile.pdf'])
+    assert_equal(options[:outfile], 'outfile.pdf')
+  end
+
+  def test_pages
+    options = Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '4'])
+    assert_equal(options[:pages], 4)
+   
+    assert_raises(OptionParser::InvalidArgument) { options = Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '0.5']) }
+    assert_raises(OptionParser::InvalidArgument) { options = Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '0']) }
+    assert_raises(OptionParser::InvalidArgument) { options = Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '-1']) }
+  end
+
+  def test_wrong_number_of_arguments
+    assert_raises(RuntimeError) { options = Pdfmult::Optionparser.parse!(['sample.pdf', 'sample2.pdf']) }
+    assert_raises(RuntimeError) { options = Pdfmult::Optionparser.parse!(['']) }
+    assert_raises(RuntimeError) { options = Pdfmult::Optionparser.parse!([]) }
+  end
+
+  def test_invalid
+    assert_raises(OptionParser::InvalidOption) { options = Pdfmult::Optionparser.parse!(['-x']) }
+  end
+
+end
+
+
+class LaTeXDocumentTest < Test::Unit::TestCase
+
+  def test_latex_document
+    document = Pdfmult::LaTeXDocument.new('sample.pdf', 8, 3)
+    assert_equal(document.to_s.split(/\n/)[0],
+                 "\\documentclass[a4paper,landscape]{article}")
+    assert_equal(document.to_s.split(/\n/)[-2],
+                 "\\includepdf[pages={3,3,3,3,3,3,3,3},nup=4x2]{sample.pdf}%")
+  end
+end
+
+
+class PDFInfoTest < Test::Unit::TestCase
+
+  def test_page_count
+    pdfinfo = Pdfmult::PDFInfo.new('sample.pdf')
+    assert_equal(pdfinfo.page_count, 3)
+    pdfinfo = Pdfmult::PDFInfo.new('not_a_file.pdf')
+    assert_equal(pdfinfo.page_count, nil)
+  end
+
+  def test_pdfinfocmd
+    pdfinfo = Pdfmult::PDFInfo.new('sample.pdf', :pdfinfocmd => '/usr/bin/pdfinfo')
+    assert_equal(pdfinfo.page_count, 3)
+    pdfinfo = Pdfmult::PDFInfo.new('sample.pdf', :pdfinfocmd => 'not_a_command')
+    assert_equal(pdfinfo.page_count, nil)
+  end
+end

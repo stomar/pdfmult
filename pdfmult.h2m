@@ -1,0 +1,5 @@
+[Examples]
+ pdfmult sample.pdf                 # =>  sample_2.pdf (2 copies)
+ pdfmult -n 4 sample.pdf            # =>  sample_4.pdf (4 copies)
+ pdfmult sample.pdf -o outfile.pdf  # =>  outfile.pdf  (2 copies)
+ pdfmult sample.pdf -p 3            # =>  processes 3 pages
