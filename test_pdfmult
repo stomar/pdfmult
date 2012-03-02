@@ -45,9 +45,9 @@ class OptionparserTest < Test::Unit::TestCase
   end
 
   def test_wrong_number_of_arguments
-    assert_raises(RuntimeError) { options = Pdfmult::Optionparser.parse!(['sample.pdf', 'sample2.pdf']) }
-    assert_raises(RuntimeError) { options = Pdfmult::Optionparser.parse!(['']) }
-    assert_raises(RuntimeError) { options = Pdfmult::Optionparser.parse!([]) }
+    assert_raises(ArgumentError) { options = Pdfmult::Optionparser.parse!(['sample.pdf', 'sample2.pdf']) }
+    assert_raises(ArgumentError) { options = Pdfmult::Optionparser.parse!(['']) }
+    assert_raises(ArgumentError) { options = Pdfmult::Optionparser.parse!([]) }
   end
 
   def test_invalid
