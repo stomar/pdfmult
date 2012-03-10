@@ -1,3 +1,6 @@
+[Name]
+pdfmult \- puts multiple copies of a PDF page on one page
+
 [Examples]
  pdfmult sample.pdf                 # =>  sample_2.pdf (2 copies)
  pdfmult -n 4 sample.pdf            # =>  sample_4.pdf (4 copies)

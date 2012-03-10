@@ -41,8 +41,8 @@ Installation
 
 Place `pdfmult` into your search path.
 
-On a Linux system you can also use `make install`,
-which installs `pdfmult` and its man page to `/usr/local`.
+On a Linux system you can use `[sudo] rake install`
+to install `pdfmult` and its man page to `/usr/local`.
 
 Requirements
 ------------
@@ -59,7 +59,7 @@ Documentation
 
 `pdfmult --help` prints a brief help message.
 
-If you installed `pdfmult` using `make install` you can read
+If you installed `pdfmult` using `rake install` you can read
 its man page with `man pdfmult`.
 
 Reporting bugs
