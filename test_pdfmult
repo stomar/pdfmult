@@ -3,16 +3,18 @@
 #
 # Copyright (C) 2011-2012 Marcus Stollsteimer
 
-require 'test/unit'
+require 'rubygems'
+require 'minitest/spec'
+require 'minitest/autorun'
 load 'pdfmult'
 
 PROGNAME    = 'test_pdfmult'
 PROGVERSION = '0.0.1'
 
 
-class OptionparserTest < Test::Unit::TestCase
+describe Pdfmult::Optionparser do
 
-  def test_defaults
+  it 'should return the correct default values' do
     options = Pdfmult::Optionparser.parse!(['sample.pdf'])
     expected = {
       :infile => 'sample.pdf',
@@ -20,75 +22,71 @@ class OptionparserTest < Test::Unit::TestCase
       :number => 2,
       :pages => nil
     }
-    assert_equal(expected, options)
+    options.must_equal expected
   end
 
-  def test_number
+  it 'should recognize the -n option and set the corresponding output filename' do
     options = Pdfmult::Optionparser.parse!(['sample.pdf', '-n', '4'])
-    assert_equal('sample_4.pdf', options[:outfile])
-    assert_equal(4, options[:number])
+    options[:outfile].must_equal 'sample_4.pdf'
+    options[:number].must_equal 4
   end
 
-  def test_invalid_number
-    assert_raises(OptionParser::InvalidArgument) { Pdfmult::Optionparser.parse!(['sample.pdf', '-n', '3']) }
+  it 'should not accept invalid -n option values' do
+    lambda { Pdfmult::Optionparser.parse!(['sample.pdf', '-n', '3']) }.must_raise OptionParser::InvalidArgument
   end
 
-  def test_outfile
+  it 'should recognize the -o option' do
     options = Pdfmult::Optionparser.parse!(['sample.pdf', '-o', 'outfile.pdf'])
-    assert_equal('outfile.pdf', options[:outfile])
+    options[:outfile].must_equal 'outfile.pdf'
   end
 
-  def test_pages
+  it 'should recognize the -p option' do
     options = Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '4'])
-    assert_equal(4, options[:pages])
+    options[:pages].must_equal 4
   end
 
-  def test_invalid_pages
-    assert_raises(OptionParser::InvalidArgument) { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '0.5']) }
-    assert_raises(OptionParser::InvalidArgument) { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '0']) }
-    assert_raises(OptionParser::InvalidArgument) { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '-1']) }
+  it 'should only accept positive -p option values' do
+    lambda { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '0.5']) }.must_raise OptionParser::InvalidArgument
+    lambda { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '0']) }.must_raise OptionParser::InvalidArgument
+    lambda { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '-1']) }.must_raise OptionParser::InvalidArgument
   end
 
-  def test_wrong_number_of_arguments
-    assert_raises(ArgumentError) { Pdfmult::Optionparser.parse!(['sample.pdf', 'sample2.pdf']) }
-    assert_raises(ArgumentError) { Pdfmult::Optionparser.parse!(['']) }
-    assert_raises(ArgumentError) { Pdfmult::Optionparser.parse!([]) }
+  it 'should not accept wrong number of arguments' do
+    lambda { Pdfmult::Optionparser.parse!(['sample.pdf', 'sample2.pdf']) }.must_raise ArgumentError
+    lambda { Pdfmult::Optionparser.parse!(['']) }.must_raise ArgumentError
+    lambda { Pdfmult::Optionparser.parse!([]) }.must_raise ArgumentError
   end
 
-  def test_invalid_options
-    assert_raises(OptionParser::InvalidOption) { Pdfmult::Optionparser.parse!(['-x']) }
+  it 'should not accept invalid options' do
+    lambda { Pdfmult::Optionparser.parse!(['-x']) }.must_raise OptionParser::InvalidOption
   end
 end
 
 
-class LaTeXDocumentTest < Test::Unit::TestCase
+describe Pdfmult::LaTeXDocument do
 
-  def test_latex_document
+  it 'should return the expected LaTeX code' do
     document = Pdfmult::LaTeXDocument.new('sample.pdf', 8, 3)
-    assert_equal("\\documentclass[a4paper,landscape]{article}",
-                 document.to_s.split(/\n/)[0])
-    assert_equal("\\includepdf[pages={3,3,3,3,3,3,3,3},nup=4x2]{sample.pdf}%",
-                 document.to_s.split(/\n/)[-2])
+    document.to_s.split(/\n/)[0].must_equal "\\documentclass[a4paper,landscape]{article}"
+    document.to_s.split(/\n/)[-2].must_equal "\\includepdf[pages={3,3,3,3,3,3,3,3},nup=4x2]{sample.pdf}%"
   end
 end
 
 
-class PDFInfoTest < Test::Unit::TestCase
+describe Pdfmult::PDFInfo do
 
-  def test_page_count
-    pdfinfo = Pdfmult::PDFInfo.new('sample.pdf')
-    assert_equal(3, pdfinfo.page_count)
-    pdfinfo = Pdfmult::PDFInfo.new('sample.pdf', :pdfinfocmd => '/usr/bin/pdfinfo')
-    assert_equal(3, pdfinfo.page_count)
-  end
+  describe 'when asked about the page count' do
+    it 'should return the page count for existing file and system tool' do
+      Pdfmult::PDFInfo.new('sample.pdf').page_count.must_equal 3
+      Pdfmult::PDFInfo.new('sample.pdf', :pdfinfocmd => '/usr/bin/pdfinfo').page_count.must_equal 3
+    end
 
-  def test_non_existent_file
-    pdfinfo = Pdfmult::PDFInfo.new('not_a_file.pdf')
-    assert_equal(nil, pdfinfo.page_count)
-  end
+    it 'should return nil for non-existent files' do
+      Pdfmult::PDFInfo.new('not_a_file.pdf').page_count.must_be_nil
+    end
 
-  def test_pdfinfocmd
-    pdfinfo = Pdfmult::PDFInfo.new('sample.pdf', :pdfinfocmd => 'not_a_command')
-    assert_equal(nil, pdfinfo.page_count)
+    it "should return nil for non-existent `pdfinfo' system tool" do
+      Pdfmult::PDFInfo.new('sample.pdf', :pdfinfocmd => 'not_a_command').page_count.must_be_nil
+    end
   end
 end
