@@ -239,7 +239,7 @@ module Pdfmult
       if system(command + ' >/dev/null 2>&1')
         infostring = `#{command}`
         infostring.each_line do |line|
-          key, x, val = line.chomp.partition(/\s*:\s*/)
+          key, val = line.chomp.split(/\s*:\s*/, 2)
           infos[key] = val
         end
         value = infos['Pages']
