@@ -11,7 +11,7 @@ HELP2MAN = 'help2man'
 SED = 'sed'
 
 BINARY = 'pdfmult'
-MANPAGE = 'pdfmult.1'
+MANPAGE = 'man/pdfmult.1'
 H2MFILE = 'pdfmult.h2m'
 
 
@@ -36,7 +36,8 @@ end
 desc 'Uninstall binary and man page'
 task :uninstall do
   rm "#{BINDIR}/#{BINARY}"
-  rm "#{MANDIR}/#{MANPAGE}"
+  manfile = File.basename(MANPAGE)
+  rm "#{MANDIR}/#{manfile}"
 end
 
 
