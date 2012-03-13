@@ -11,6 +11,8 @@ load 'pdfmult'
 PROGNAME    = 'test_pdfmult.rb'
 PROGVERSION = '0.0.1'
 
+SRCPATH = File.dirname(__FILE__)
+
 
 describe Pdfmult::Optionparser do
 
@@ -75,10 +77,14 @@ end
 
 describe Pdfmult::PDFInfo do
 
+  before do
+    @sample_pdf = File.expand_path("#{SRCPATH}/sample.pdf")
+  end
+
   describe 'when asked about the page count' do
     it 'should return the page count for existing file and system tool' do
-      Pdfmult::PDFInfo.new('sample.pdf').page_count.must_equal 3
-      Pdfmult::PDFInfo.new('sample.pdf', :pdfinfocmd => '/usr/bin/pdfinfo').page_count.must_equal 3
+      Pdfmult::PDFInfo.new(@sample_pdf).page_count.must_equal 3
+      Pdfmult::PDFInfo.new(@sample_pdf, :pdfinfocmd => '/usr/bin/pdfinfo').page_count.must_equal 3
     end
 
     it 'should return nil for non-existent files' do
@@ -86,7 +92,7 @@ describe Pdfmult::PDFInfo do
     end
 
     it "should return nil for non-existent `pdfinfo' system tool" do
-      Pdfmult::PDFInfo.new('sample.pdf', :pdfinfocmd => 'not_a_command').page_count.must_be_nil
+      Pdfmult::PDFInfo.new(@sample_pdf, :pdfinfocmd => 'not_a_command').page_count.must_be_nil
     end
   end
 end
