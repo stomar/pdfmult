@@ -258,16 +258,16 @@ module Pdfmult
     # The main program.
     def self.run!
 
-      # tests
-      system("#{PDFLATEX} --version >/dev/null") or fail("#{PROGNAME}: `#{PDFLATEX}' not found")
-      system("#{KPSEWHICH} pdfpages.sty >/dev/null") or fail("#{PROGNAME}: LaTeX package `pdfpages.sty' seems not to be installed")
-
       # parse options
       begin
         options = Optionparser.parse!(ARGV)
       rescue => e
         usage_fail(e.message)
       end
+
+      # tests
+      system("#{PDFLATEX} --version >/dev/null") or fail("#{PROGNAME}: `#{PDFLATEX}' not found")
+      system("#{KPSEWHICH} pdfpages.sty >/dev/null") or fail("#{PROGNAME}: LaTeX package `pdfpages.sty' seems not to be installed")
 
       # main body #
 
