@@ -18,7 +18,7 @@ H2MFILE = 'pdfmult.h2m'
 task :default => [:test]
 
 Rake::TestTask.new do |t|
-  t.pattern = 'test_*.rb'
+  t.pattern = 'test/**/test_*.rb'
   t.verbose = true
   t.warning = true
 end
