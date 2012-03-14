@@ -248,7 +248,7 @@ module Pdfmult
     end
 
     # Returns true if default +pdfinfo+ system tool is available (for unit tests).
-    def self.infocmd_available?
+    def self.infocmd_available? # :nodoc:
       Application.command_available?(PDFINFOCMD + ' -v')
     end
   end
@@ -304,7 +304,7 @@ module Pdfmult
     end
 
     # Prints an error message and a short help information, then exits.
-    def self.usage_fail(message)
+    def self.usage_fail(message) # :nodoc:
       warn "#{PROGNAME}: #{message}"
       warn "Use `#{PROGNAME} --help' for valid options."
       exit ERRORCODE[:usage]
@@ -313,7 +313,7 @@ module Pdfmult
     # Tests silently whether the given system command is available.
     #
     # +command+ - command to test
-    def self.command_available?(command)
+    def self.command_available?(command) # :nodoc:
       !!system(command + ' >/dev/null 2>&1')
     end
   end
