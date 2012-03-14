@@ -298,8 +298,6 @@ module Pdfmult
       end
     end
 
-    private
-
     # Prints an error message and a short help information, then exits.
     def self.usage_fail(message)
       warn "#{PROGNAME}: #{message}"
