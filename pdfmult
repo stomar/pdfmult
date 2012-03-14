@@ -271,8 +271,8 @@ module Pdfmult
       end
 
       # tests
-      fail("#{PROGNAME}: `#{PDFLATEX}' not found")  unless command_available?("#{PDFLATEX} --version")
-      fail("#{PROGNAME}: LaTeX package `pdfpages.sty' seems not to be installed") unless command_available?("#{KPSEWHICH} pdfpages.sty")
+      general_fail("`#{PDFLATEX}' seems not to be installed")  unless command_available?("#{PDFLATEX} --version")
+      general_fail("`pdfpages.sty' seems not to be installed")  unless command_available?("#{KPSEWHICH} pdfpages.sty")
 
       # main body #
 
@@ -301,6 +301,12 @@ module Pdfmult
           FileUtils::mv(pdfpath, outfile)
         end
       end
+    end
+
+    # Prints an error message and exits.
+    def self.general_fail(message) # :nodoc:
+      warn "#{PROGNAME}: #{message}"
+      exit ERRORCODE[:general]
     end
 
     # Prints an error message and a short help information, then exits.
