@@ -83,8 +83,10 @@ describe Pdfmult::PDFInfo do
 
   describe 'when asked about the page count' do
     it 'should return the page count for existing file and system tool' do
+      infocmd = Pdfmult::PDFInfo::PDFINFOCMD
+      skip("Skipped: `#{infocmd}' not available on the system")  unless Pdfmult::PDFInfo.infocmd_available?
       Pdfmult::PDFInfo.new(@sample_pdf).page_count.must_equal 3
-      Pdfmult::PDFInfo.new(@sample_pdf, :pdfinfocmd => '/usr/bin/pdfinfo').page_count.must_equal 3
+      Pdfmult::PDFInfo.new(@sample_pdf, :pdfinfocmd => infocmd).page_count.must_equal 3
     end
 
     it 'should return nil for non-existent files' do
