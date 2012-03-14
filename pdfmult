@@ -236,7 +236,7 @@ module Pdfmult
 
       binary = options[:pdfinfocmd] || PDFINFOCMD  # only for unit tests
       command = "#{binary} #{file}"
-      if system(command + ' >/dev/null 2>&1')
+      if Application.command_available?(command)
         infostring = `#{command}`
         infostring.each_line do |line|
           key, val = line.chomp.split(/\s*:\s*/, 2)
@@ -245,6 +245,11 @@ module Pdfmult
         value = infos['Pages']
         @page_count = value.to_i  unless value.nil?
       end
+    end
+
+    # Returns true if default +pdfinfo+ system tool is available (for unit tests).
+    def self.infocmd_available?
+      Application.command_available?(PDFINFOCMD + ' -v')
     end
   end
 
@@ -266,8 +271,8 @@ module Pdfmult
       end
 
       # tests
-      system("#{PDFLATEX} --version >/dev/null") or fail("#{PROGNAME}: `#{PDFLATEX}' not found")
-      system("#{KPSEWHICH} pdfpages.sty >/dev/null") or fail("#{PROGNAME}: LaTeX package `pdfpages.sty' seems not to be installed")
+      fail("#{PROGNAME}: `#{PDFLATEX}' not found")  unless command_available?("#{PDFLATEX} --version")
+      fail("#{PROGNAME}: LaTeX package `pdfpages.sty' seems not to be installed") unless command_available?("#{KPSEWHICH} pdfpages.sty")
 
       # main body #
 
@@ -303,6 +308,13 @@ module Pdfmult
       warn "#{PROGNAME}: #{message}"
       warn "Use `#{PROGNAME} --help' for valid options."
       exit ERRORCODE[:usage]
+    end
+
+    # Tests silently whether the given system command is available.
+    #
+    # +command+ - command to test
+    def self.command_available?(command)
+      !!system(command + ' >/dev/null 2>&1')
     end
   end
 
