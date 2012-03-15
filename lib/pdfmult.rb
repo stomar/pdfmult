@@ -58,6 +58,7 @@ module Pdfmult
 
   PROGNAME  = 'pdfmult'
   VERSION   = '1.0.0'
+  DATE      = '2012-03-15'
   COPYRIGHT = "Copyright (C) 2011-2012 Marcus Stollsteimer.\n" +
               "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n" +
               "This is free software: you are free to change and redistribute it.\n" +
