@@ -3,7 +3,6 @@
 #
 # Copyright (C) 2011-2012 Marcus Stollsteimer
 
-require 'rubygems'
 require 'minitest/spec'
 require 'minitest/autorun'
 require 'pdfmult'
