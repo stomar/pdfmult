@@ -90,7 +90,7 @@ module Pdfmult
         opt.separator ''
         opt.separator 'pdfmult is a command line tool that'
         opt.separator 'rearranges multiple copies of a PDF page (shrunken) on one page.'
-        opt.separator ''       
+        opt.separator ''
         opt.separator 'The paper size of the produced PDF file is A4,'
         opt.separator 'the input file is also assumed to be in A4 format.'
         opt.separator 'The input PDF file may consist of several pages.'

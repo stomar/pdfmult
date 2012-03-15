@@ -10,7 +10,7 @@ MANDIR = '/usr/local/man/man1'
 HELP2MAN = 'help2man'
 SED = 'sed'
 
-BINARY = 'pdfmult.rb'
+BINARY = 'lib/pdfmult.rb'
 BINARYNAME = 'pdfmult'  # install using this name
 MANPAGE = 'man/pdfmult.1'
 H2MFILE = 'pdfmult.h2m'
