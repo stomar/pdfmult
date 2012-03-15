@@ -53,6 +53,7 @@ require 'optparse'
 require 'tempfile'
 require 'fileutils'
 
+# This module contains the classes for the +pdfmult+ tool
 module Pdfmult
 
   PROGNAME  = 'pdfmult'
