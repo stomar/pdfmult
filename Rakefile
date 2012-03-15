@@ -10,7 +10,8 @@ MANDIR = '/usr/local/man/man1'
 HELP2MAN = 'help2man'
 SED = 'sed'
 
-BINARY = 'pdfmult'
+BINARY = 'pdfmult.rb'
+BINARYNAME = 'pdfmult'  # install using this name
 MANPAGE = 'man/pdfmult.1'
 H2MFILE = 'pdfmult.h2m'
 
@@ -27,7 +28,7 @@ end
 desc 'Install binary and man page'
 task :install => [BINARY, MANPAGE] do
   mkdir_p BINDIR
-  install(BINARY, BINDIR)
+  install(BINARY, BINDIR + '/' + BINARYNAME)
   mkdir_p MANDIR
   install(MANPAGE, MANDIR, :mode => 0644)
 end
@@ -35,7 +36,7 @@ end
 
 desc 'Uninstall binary and man page'
 task :uninstall do
-  rm "#{BINDIR}/#{BINARY}"
+  rm "#{BINDIR}/#{BINARYNAME}"
   manfile = File.basename(MANPAGE)
   rm "#{MANDIR}/#{manfile}"
 end

@@ -6,7 +6,7 @@
 require 'rubygems'
 require 'minitest/spec'
 require 'minitest/autorun'
-load 'pdfmult'
+require 'pdfmult'
 
 PROGNAME    = 'test_pdfmult.rb'
 PROGVERSION = '0.0.1'
