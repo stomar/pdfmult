@@ -16,6 +16,11 @@ MANPAGE = 'man/pdfmult.1'
 H2MFILE = 'pdfmult.h2m'
 
 
+def gemspec_file
+  'pdfmult.gemspec'
+end
+
+
 task :default => [:test]
 
 Rake::TestTask.new do |t|
@@ -50,4 +55,10 @@ file MANPAGE => [BINARY, H2MFILE] do
   sh "#{HELP2MAN} --no-info --include=#{H2MFILE} -o #{MANPAGE} ./#{BINARY}"
   sh "#{SED} -i '/\.PP/{N;s/\.PP\\nOptions/.SH OPTIONS/}' #{MANPAGE}"
   sh "#{SED} -i 's/^License GPL/.br\\nLicense GPL/;s/There is NO WARRANTY/.br\\nThere is NO WARRANTY/' #{MANPAGE}"
+end
+
+
+desc 'Build gem'
+task :build do
+  sh "gem build #{gemspec_file}"
 end
