@@ -10,7 +10,8 @@ Gem::Specification.new do |s|
   s.rubyforge_project = 'pdfmult'
 
   s.description = 'pdfmult is a command line tool that rearranges ' +
-                  'multiple copies of a PDF page (shrunken) on one page.'
+                  'multiple copies of a PDF page (shrunken) on one page. ' +
+                  'It is a wrapper for pdflatex with the pdfpages package.'
   s.summary = 'pdfmult - puts multiple copies of a PDF page on one page'
 
   s.authors = ['Marcus Stollsteimer']

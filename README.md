@@ -41,7 +41,7 @@ Installation
 
 Use `gem install pdfmult`.
 
-Or opy `lib/pdfmult.rb` under the name `pdfmult` into your search path.
+Or copy `lib/pdfmult.rb` under the name `pdfmult` into your search path.
 
 On a Linux system you can use `[sudo] rake install`
 to install `pdfmult` and its man page to `/usr/local`.
