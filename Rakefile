@@ -59,6 +59,6 @@ end
 
 
 desc 'Build gem'
-task :build do
+task :build => [MANPAGE] do
   sh "gem build #{gemspec_file}"
 end
