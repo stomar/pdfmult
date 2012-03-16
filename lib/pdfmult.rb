@@ -20,6 +20,8 @@
 #
 # +pdfmult+ uses +pdflatex+ with the +pdfpages+ package,
 # so both have to be installed on the system.
+# If the --latex option is used, though, +pdflatex+ is not run
+# and a LaTeX file is created instead of a PDF.
 #
 # == Options
 #
@@ -29,6 +31,8 @@
 #
 # -p, --pages:: Number of pages to convert.
 #               If given, +pdfmult+ does not try to obtain the page count from the source PDF.
+#
+# -l, --latex:: Create a LaTeX file instead of a PDF file (default: infile_NUMBER.tex).
 #
 # -h, --help:: Prints a brief help message and exits.
 #
@@ -83,8 +87,9 @@ module Pdfmult
       options = {
         :number  => 2,
         :infile  => nil,
+        :latex   => false,
         :outfile => nil,
-        :pages => nil
+        :pages   => nil
       }
 
       opt_parser = OptionParser.new do |opt|
@@ -99,6 +104,11 @@ module Pdfmult
         opt.separator 'If pdfmult succeeds in obtaining the page count it will rearrange all pages,'
         opt.separator 'if not, only the first page is processed'
         opt.separator '(unless the page count was specified via command line option).'
+        opt.separator ''
+        opt.separator 'pdfmult uses pdflatex with the pdfpages package,'
+        opt.separator 'so both have to be installed on the system.'
+        opt.separator 'If the --latex option is used, though, pdflatex is not run'
+        opt.separator 'and a LaTeX file is created instead of a PDF.'
         opt.separator ''
         opt.separator 'Options'
         opt.separator ''
@@ -135,6 +145,10 @@ module Pdfmult
           options[:pages] = p
         end
 
+        opt.on('-l', '--latex', 'Create a LaTeX file instead of a PDF file (default: file_2.tex).') do
+          options[:latex] = true
+        end
+
         opt.separator ''
       end
       opt_parser.parse!(argv)
@@ -145,7 +159,8 @@ module Pdfmult
       options[:infile] = argv.pop
 
       # set output file unless set by option
-      options[:outfile] ||= options[:infile].gsub(/(.pdf)$/, '') + "_#{options[:number].to_s}.pdf"
+      ext = options[:latex] ? 'tex' : 'pdf'
+      options[:outfile] ||= options[:infile].gsub(/(.pdf)$/, '') + "_#{options[:number].to_s}.#{ext}"
 
       options
     end
@@ -272,14 +287,15 @@ module Pdfmult
         usage_fail(e.message)
       end
 
-      # tests
-      general_fail("`#{PDFLATEX}' seems not to be installed")  unless command_available?("#{PDFLATEX} --version")
-      general_fail("`pdfpages.sty' seems not to be installed")  unless command_available?("#{KPSEWHICH} pdfpages.sty")
-
-      # main body #
-
       infile = options[:infile]
       outfile = options[:outfile]
+
+      # test for pdflatex installation
+      unless options[:latex]
+        message = 'seems not to be installed (you might try using the -l option)'
+        general_fail("`#{PDFLATEX}' #{message}")  unless command_available?("#{PDFLATEX} --version")
+        general_fail("`pdfpages.sty' #{message}")  unless command_available?("#{KPSEWHICH} pdfpages.sty")
+      end
 
       # test input file
       usage_fail("no such file: `#{infile}'")  unless File.exist?(infile)
@@ -299,14 +315,20 @@ module Pdfmult
       # create LaTeX document
       document = LaTeXDocument.new(infile, options[:number], pages)
 
-      Dir.mktmpdir('pdfmult') do |dir|
-        open("#{dir}/pdfmult.tex", 'w') do |f|
-          pdfpath = "#{dir}/pdfmult.pdf"
+      if options[:latex]
+        open(outfile, 'w') do |f|
           f.write(document.to_s)
-          f.flush
-          system("#{PDFLATEX} -output-directory #{dir} pdfmult.tex")
-          puts "Writing on #{outfile}."
-          FileUtils::mv(pdfpath, outfile)
+        end
+      else
+        Dir.mktmpdir('pdfmult') do |dir|
+          open("#{dir}/pdfmult.tex", 'w') do |f|
+            pdfpath = "#{dir}/pdfmult.pdf"
+            f.write(document.to_s)
+            f.flush
+            system("#{PDFLATEX} -output-directory #{dir} pdfmult.tex")
+            puts "Writing on #{outfile}."
+            FileUtils::mv(pdfpath, outfile)
+          end
         end
       end
     end

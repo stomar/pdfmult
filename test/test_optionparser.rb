@@ -16,7 +16,8 @@ describe Pdfmult::Optionparser do
       :infile => 'sample.pdf',
       :outfile => 'sample_2.pdf',
       :number => 2,
-      :pages => nil
+      :pages => nil,
+      :latex => false
     }
     options.must_equal expected
   end
@@ -39,6 +40,12 @@ describe Pdfmult::Optionparser do
   it 'should recognize the -p option' do
     options = Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '4'])
     options[:pages].must_equal 4
+  end
+
+  it 'should recognize the -l option and set the corresponding output filename' do
+    options = Pdfmult::Optionparser.parse!(['sample.pdf', '-l'])
+    options[:outfile].must_equal 'sample_2.tex'
+    options[:latex].must_equal true
   end
 
   it 'should only accept positive -p option values' do

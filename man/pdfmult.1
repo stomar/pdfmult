@@ -15,6 +15,11 @@ The input PDF file may consist of several pages.
 If pdfmult succeeds in obtaining the page count it will rearrange all pages,
 if not, only the first page is processed
 (unless the page count was specified via command line option).
+.PP
+pdfmult uses pdflatex with the pdfpages package,
+so both have to be installed on the system.
+If the \fB\-\-latex\fR option is used, though, pdflatex is not run
+and a LaTeX file is created instead of a PDF.
 .SH OPTIONS
 .TP
 \fB\-n\fR, \fB\-\-number\fR NUMBER
@@ -26,6 +31,9 @@ Output file (default: file_2.pdf).
 \fB\-p\fR, \fB\-\-pages\fR NUMBER
 Number of pages to convert.
 If given, pdfmult does not try to obtain the page count from the source PDF.
+.TP
+\fB\-l\fR, \fB\-\-latex\fR
+Create a LaTeX file instead of a PDF file (default: file_2.tex).
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 Prints a brief help message and exits.

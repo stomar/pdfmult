@@ -11,6 +11,9 @@ If `pdfmult` succeeds in obtaining the page count it will rearrange all pages,
 if not, only the first page is processed
 (unless the page count was specified via command line option).
 
+If the `--latex` option is used, `pdflatex` is not run and
+a LaTeX file is created instead of a PDF.
+
 Examples
 --------
 
@@ -53,6 +56,8 @@ As of now, `pdfmult` has only been tested on a Linux system.
 
 - `pdfmult` is written in [Ruby][Ruby], so Ruby must be installed on your system.
 - `pdfmult` uses `pdflatex` with the `pdfpages` package, so both have to be installed on the system.
+  (If `pdfmult` can not find the `pdflatex` command on your system
+  you might want to use the `--latex` option.)
 - `pdfmult` tries to obtain the page count of PDF files with `pdfinfo`.
   If it fails, by default only the first page of a PDF file will be processed.
 
