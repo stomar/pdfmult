@@ -298,7 +298,7 @@ module Pdfmult
           pdfpath = "#{dir}/pdfmult.pdf"
           f.write(document.to_s)
           f.flush
-          system("/usr/bin/pdflatex -output-directory #{dir} pdfmult.tex")
+          system("#{PDFLATEX} -output-directory #{dir} pdfmult.tex")
           puts "Writing on #{outfile}."
           FileUtils::mv(pdfpath, outfile)
         end
