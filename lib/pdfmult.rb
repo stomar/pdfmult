@@ -285,6 +285,12 @@ module Pdfmult
       usage_fail("no such file: `#{infile}'")  unless File.exist?(infile)
       usage_fail("specified input not of the type `file'")  unless File.ftype(infile) == 'file'
 
+      # test for existing output file
+      if File.exist?(outfile)
+        overwrite_ok = ask("File `#{outfile}' already exists. Overwrite?")
+        exit  unless overwrite_ok
+      end
+
       # set page number (get PDF info if necessary)
       pages = options[:pages]
       pages ||= PDFInfo.new(infile).page_count
@@ -302,6 +308,21 @@ module Pdfmult
           puts "Writing on #{outfile}."
           FileUtils::mv(pdfpath, outfile)
         end
+      end
+    end
+
+    # Asks for yes or no (y/n).
+    #
+    # +question+ - string to be printed
+    #
+    # Returns +true+ if the answer is yes.
+    def self.ask(question) # :nodoc:
+      while true
+        print question + ' [y/n] '
+        reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
+        return true   if reply == 'y'
+        return false  if reply == 'n'
+        puts "Please answer `y' or `n'."
       end
     end
 
