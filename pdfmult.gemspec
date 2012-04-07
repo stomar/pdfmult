@@ -29,12 +29,12 @@ Gem::Specification.new do |s|
 
   s.rdoc_options = ['--charset=UTF-8']
 
-  s.files = %w[
+  s.files = %w{
       README.md
       Rakefile
       pdfmult.gemspec
       pdfmult.h2m
-    ] +
+    } +
     Dir.glob('example*.*') +
     Dir.glob('{bin,lib,man,test}/**/*')
 

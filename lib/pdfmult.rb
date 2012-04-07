@@ -160,7 +160,8 @@ module Pdfmult
 
       # set output file unless set by option
       ext = options[:latex] ? 'tex' : 'pdf'
-      options[:outfile] ||= options[:infile].gsub(/(.pdf)$/, '') + "_#{options[:number].to_s}.#{ext}"
+      infile_without_ext = options[:infile].gsub(/(.pdf)$/, '')
+      options[:outfile] ||= "#{infile_without_ext}_#{options[:number].to_s}.#{ext}"
 
       options
     end
@@ -207,12 +208,12 @@ module Pdfmult
 
       case @number
       when 2
-        class_options += ',landscape'
+        class_options << ',landscape'
         geometry = '2x1'
       when 4
         geometry = '2x2'
       when 8
-        class_options += ',landscape'
+        class_options << ',landscape'
         geometry = '4x2'
       when 9
         geometry = '3x3'
@@ -266,7 +267,7 @@ module Pdfmult
 
     # Returns true if default +pdfinfo+ system tool is available (for unit tests).
     def self.infocmd_available? # :nodoc:
-      Application.command_available?(PDFINFOCMD + ' -v')
+      Application.command_available?("#{PDFINFOCMD} -v")
     end
   end
 
@@ -340,7 +341,7 @@ module Pdfmult
     # Returns +true+ if the answer is yes.
     def self.ask(question) # :nodoc:
       while true
-        print question + ' [y/n] '
+        print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
         return true   if reply == 'y'
         return false  if reply == 'n'
@@ -365,7 +366,7 @@ module Pdfmult
     #
     # +command+ - command to test
     def self.command_available?(command) # :nodoc:
-      !!system(command + ' >/dev/null 2>&1')
+      !!system("#{command} >/dev/null 2>&1")
     end
   end
 
