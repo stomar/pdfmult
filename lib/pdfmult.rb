@@ -63,6 +63,8 @@ module Pdfmult
   PROGNAME  = 'pdfmult'
   VERSION   = '1.1.0'
   DATE      = '2012-03-16'
+  HOMEPAGE  = 'https://github.com/stomar/pdfmult/'
+
   COPYRIGHT = "Copyright (C) 2011-2012 Marcus Stollsteimer.\n" +
               "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n" +
               "This is free software: you are free to change and redistribute it.\n" +
@@ -117,7 +119,7 @@ module Pdfmult
         # exit successfully (GNU Coding Standards)
         opt.on_tail('-h', '--help', 'Prints a brief help message and exits.') do
           puts opt_parser
-          puts "\nReport bugs on the pdfmult home page: <https://github.com/stomar/pdfmult/>"
+          puts "\nReport bugs on the #{PROGNAME} home page: <#{HOMEPAGE}>"
           exit
         end
 

@@ -1,7 +1,8 @@
 require 'lib/pdfmult'
 
-version = Pdfmult::VERSION
-date    = Pdfmult::DATE
+version  = Pdfmult::VERSION
+date     = Pdfmult::DATE
+homepage = Pdfmult::HOMEPAGE
 
 Gem::Specification.new do |s|
   s.name              = 'pdfmult'
@@ -16,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.authors = ['Marcus Stollsteimer']
   s.email = 'sto.mar@web.de'
-  s.homepage = 'https://github.com/stomar/pdfmult/'
+  s.homepage = homepage
 
   s.license = 'GPL-3'
 
