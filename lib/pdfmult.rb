@@ -319,9 +319,7 @@ module Pdfmult
       document = LaTeXDocument.new(infile, options[:number], pages)
 
       if options[:latex]
-        open(outfile, 'w') do |f|
-          f.write(document.to_s)
-        end
+        open(outfile, 'w') {|f| f.write(document.to_s) }
       else
         Dir.mktmpdir('pdfmult') do |dir|
           open("#{dir}/pdfmult.tex", 'w') do |f|
