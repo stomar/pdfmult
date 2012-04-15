@@ -63,8 +63,8 @@ require 'fileutils'
 module Pdfmult
 
   PROGNAME  = 'pdfmult'
-  VERSION   = '1.1.0'
-  DATE      = '2012-03-16'
+  VERSION   = '1.2.0'
+  DATE      = '2012-04-15'
   HOMEPAGE  = 'https://github.com/stomar/pdfmult/'
 
   COPYRIGHT = "Copyright (C) 2011-2012 Marcus Stollsteimer.\n" +
