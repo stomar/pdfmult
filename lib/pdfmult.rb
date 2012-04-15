@@ -27,12 +27,14 @@
 #
 # -n, --number:: Number of copies to put on one page: 2 (default), 4, 8, 9, 16.
 #
+# -f, --force:: Do not prompt before overwriting.
+#
+# -l, --latex:: Create a LaTeX file instead of a PDF file (default: infile_NUMBER.tex).
+#
 # -o, --output:: Output file (default: infile_NUMBER.pdf).
 #
 # -p, --pages:: Number of pages to convert.
 #               If given, +pdfmult+ does not try to obtain the page count from the source PDF.
-#
-# -l, --latex:: Create a LaTeX file instead of a PDF file (default: infile_NUMBER.tex).
 #
 # -h, --help:: Prints a brief help message and exits.
 #
@@ -87,9 +89,10 @@ module Pdfmult
     def self.parse!(argv)
 
       options = {
-        :number  => 2,
+        :force   => false,
         :infile  => nil,
         :latex   => false,
+        :number  => 2,
         :outfile => nil,
         :pages   => nil
       }
@@ -135,6 +138,14 @@ module Pdfmult
           options[:number] = n
         end
 
+        opt.on('-f', '--force', 'Do not prompt before overwriting.') do
+          options[:force] = true
+        end
+
+        opt.on('-l', '--latex', 'Create a LaTeX file instead of a PDF file (default: file_2.tex).') do
+          options[:latex] = true
+        end
+
         opt.on('-o', '--output FILE', String,
                'Output file (default: file_2.pdf).') do |f|
           options[:outfile] = f
@@ -145,10 +156,6 @@ module Pdfmult
                "If given, #{PROGNAME} does not try to obtain the page count from the source PDF.") do |p|
           raise(OptionParser::InvalidArgument, p)  unless p > 0
           options[:pages] = p
-        end
-
-        opt.on('-l', '--latex', 'Create a LaTeX file instead of a PDF file (default: file_2.tex).') do
-          options[:latex] = true
         end
 
         opt.separator ''
@@ -305,7 +312,7 @@ module Pdfmult
       usage_fail("specified input not of the type `file'")  unless File.ftype(infile) == 'file'
 
       # test for existing output file
-      if File.exist?(outfile)
+      if File.exist?(outfile) and !options[:force]
         overwrite_ok = ask("File `#{outfile}' already exists. Overwrite?")
         exit  unless overwrite_ok
       end
