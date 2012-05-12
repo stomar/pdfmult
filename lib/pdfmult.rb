@@ -327,6 +327,7 @@ module Pdfmult
       document = LaTeXDocument.new(infile, options[:number], pages)
 
       if options[:latex]
+        warn "Writing on #{outfile}."
         open(outfile, 'w') {|f| f.write(document.to_s) }
       else
         Dir.mktmpdir('pdfmult') do |dir|
