@@ -199,7 +199,7 @@ module Pdfmult
       "\\includepdf[pages={PAGES},nup=GEOMETRY]{FILENAME}%\n"
 
     FOOTER =
-      '\end{document}'
+      "\\end{document}\n"
 
     # Initializes a LaTeXDocument instance.
     #
