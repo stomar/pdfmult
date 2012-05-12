@@ -58,6 +58,7 @@
 require 'optparse'
 require 'tempfile'
 require 'fileutils'
+require 'open3'
 
 # This module contains the classes for the +pdfmult+ tool
 module Pdfmult
@@ -333,8 +334,12 @@ module Pdfmult
             pdfpath = "#{dir}/pdfmult.pdf"
             f.write(document.to_s)
             f.flush
-            system("#{PDFLATEX} -output-directory #{dir} pdfmult.tex")
-            puts "Writing on #{outfile}."
+            command = "#{PDFLATEX} -output-directory #{dir} pdfmult.tex"
+            Open3.popen3(command) do |stdin, stdout, stderr|
+              stdout.each_line {|line| warn line.chomp }  # redirect progress messages to stderr
+              stderr.read  # make sure all streams are read (and command has finished)
+            end
+            warn "Writing on #{outfile}."
             FileUtils::mv(pdfpath, outfile)
           end
         end
@@ -348,11 +353,11 @@ module Pdfmult
     # Returns +true+ if the answer is yes.
     def self.ask(question) # :nodoc:
       while true
-        print "#{question} [y/n] "
+        $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
         return true   if reply == 'y'
         return false  if reply == 'n'
-        puts "Please answer `y' or `n'."
+        warn "Please answer `y' or `n'."
       end
     end
 
