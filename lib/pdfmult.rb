@@ -331,15 +331,16 @@ module Pdfmult
         open(outfile, 'w') {|f| f.write(document.to_s) }
       else
         Dir.mktmpdir('pdfmult') do |dir|
-          pdfpath = "#{dir}/pdfmult.pdf"
-          open("#{dir}/pdfmult.tex", 'w') {|f| f.write(document.to_s) }
-          command = "#{PDFLATEX} -output-directory #{dir} pdfmult.tex"
+          texfile = 'pdfmult.tex'
+          pdffile = 'pdfmult.pdf'
+          open("#{dir}/#{texfile}", 'w') {|f| f.write(document.to_s) }
+          command = "#{PDFLATEX} -output-directory #{dir} #{texfile}"
           Open3.popen3(command) do |stdin, stdout, stderr|
             stdout.each_line {|line| warn line.chomp }  # redirect progress messages to stderr
             stderr.read  # make sure all streams are read (and command has finished)
           end
           warn "Writing on #{outfile}."
-          FileUtils::mv(pdfpath, outfile)
+          FileUtils::mv("#{dir}/#{pdffile}", outfile)
         end
       end
     end
