@@ -39,6 +39,10 @@ Use the program as shown in the examples below.
 
     processes the first 3 pages of `sample.pdf`
 
+* `pdfmult sample.pdf -o - | lpr`
+
+    sends output via stdout to print command
+
 Installation
 ------------
 

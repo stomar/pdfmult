@@ -32,6 +32,7 @@
 # -l, --latex:: Create a LaTeX file instead of a PDF file (default: infile_NUMBER.tex).
 #
 # -o, --output:: Output file (default: infile_NUMBER.pdf).
+#                Use - to output to stdout.
 #
 # -p, --pages:: Number of pages to convert.
 #               If given, +pdfmult+ does not try to obtain the page count from the source PDF.
@@ -46,6 +47,7 @@
 #   pdfmult -n 4 sample.pdf            # =>  sample_4.pdf (4 copies)
 #   pdfmult sample.pdf -o outfile.pdf  # =>  outfile.pdf  (2 copies)
 #   pdfmult sample.pdf -p 3            # =>  processes 3 pages
+#   pdfmult sample.pdf -o - | lpr      # =>  sends output via stdout to print command
 #
 # == Author
 #
@@ -148,7 +150,7 @@ module Pdfmult
         end
 
         opt.on('-o', '--output FILE', String,
-               'Output file (default: file_2.pdf).') do |f|
+               'Output file (default: file_2.pdf). Use - to output to stdout.') do |f|
           options[:outfile] = f
         end
 
@@ -300,6 +302,7 @@ module Pdfmult
 
       infile = options[:infile]
       outfile = options[:outfile]
+      use_stdout = (outfile == '-')
 
       # test for pdflatex installation
       unless options[:latex]
@@ -313,7 +316,7 @@ module Pdfmult
       usage_fail("specified input not of the type `file'")  unless File.ftype(infile) == 'file'
 
       # test for existing output file
-      if File.exist?(outfile) and !options[:force]
+      if !use_stdout and !options[:force] and File.exist?(outfile)
         overwrite_ok = ask("File `#{outfile}' already exists. Overwrite?")
         exit  unless overwrite_ok
       end
@@ -327,8 +330,12 @@ module Pdfmult
       document = LaTeXDocument.new(infile, options[:number], pages)
 
       if options[:latex]
-        warn "Writing on #{outfile}."
-        open(outfile, 'w') {|f| f.write(document.to_s) }
+        if use_stdout
+          puts document.to_s
+        else
+          warn "Writing on #{outfile}."
+          open(outfile, 'w') {|f| f.write(document.to_s) }
+        end
       else
         Dir.mktmpdir('pdfmult') do |dir|
           texfile = 'pdfmult.tex'
@@ -339,8 +346,14 @@ module Pdfmult
             stdout.each_line {|line| warn line.chomp }  # redirect progress messages to stderr
             stderr.read  # make sure all streams are read (and command has finished)
           end
-          warn "Writing on #{outfile}."
-          FileUtils::mv("#{dir}/#{pdffile}", outfile)
+          if use_stdout
+            File.open("#{dir}/#{pdffile}") do |f|
+              f.each_line {|line| puts line }
+            end
+          else
+            warn "Writing on #{outfile}."
+            FileUtils::mv("#{dir}/#{pdffile}", outfile)
+          end
         end
       end
     end
