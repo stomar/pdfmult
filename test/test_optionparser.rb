@@ -48,6 +48,11 @@ describe Pdfmult::Optionparser do
     options[:force].must_equal true
   end
 
+  it 'should recognize the --no-force option' do
+    options = Pdfmult::Optionparser.parse!(['sample.pdf', '--no-force'])
+    options[:force].must_equal false
+  end
+
   it 'should recognize the -l option and set the corresponding output filename' do
     options = Pdfmult::Optionparser.parse!(['sample.pdf', '-l'])
     options[:outfile].must_equal 'sample_2.tex'

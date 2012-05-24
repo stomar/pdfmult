@@ -27,7 +27,7 @@
 #
 # -n, --number:: Number of copies to put on one page: 2 (default), 4, 8, 9, 16.
 #
-# -f, --force:: Do not prompt before overwriting.
+# -f, --[no-]force:: Do not prompt before overwriting.
 #
 # -l, --latex:: Create a LaTeX file instead of a PDF file (default: infile_NUMBER.tex).
 #
@@ -141,8 +141,8 @@ module Pdfmult
           options[:number] = n
         end
 
-        opt.on('-f', '--force', 'Do not prompt before overwriting.') do
-          options[:force] = true
+        opt.on('-f', '--[no-]force', 'Do not prompt before overwriting.') do |f|
+          options[:force] = f
         end
 
         opt.on('-l', '--latex', 'Create a LaTeX file instead of a PDF file (default: file_2.tex).') do
