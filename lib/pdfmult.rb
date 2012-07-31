@@ -62,7 +62,7 @@ require 'tempfile'
 require 'fileutils'
 require 'open3'
 
-# This module contains the classes for the +pdfmult+ tool
+# This module contains the classes for the +pdfmult+ tool.
 module Pdfmult
 
   PROGNAME  = 'pdfmult'
