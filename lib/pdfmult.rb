@@ -233,7 +233,10 @@ module Pdfmult
         geometry = '4x4'
       end
 
-      content_template = CONTENT.gsub(/PAGES/, page_string).gsub(/GEOMETRY/, geometry).gsub(/FILENAME/, @infile)
+      content_template = CONTENT.gsub(/PAGES|GEOMETRY|FILENAME/,
+                                      'PAGES' => page_string,
+                                      'GEOMETRY' => geometry,
+                                      'FILENAME' => @infile)
 
       content = HEADER.gsub(/CLASSOPTIONS/, class_options)
       @page_count.times do |i|
