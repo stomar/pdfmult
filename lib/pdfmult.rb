@@ -68,8 +68,8 @@ require 'open3'
 module Pdfmult
 
   PROGNAME  = 'pdfmult'
-  VERSION   = '1.2.0'
-  DATE      = '2012-04-15'
+  VERSION   = '1.3.0'
+  DATE      = '2012-09-22'
   HOMEPAGE  = 'https://github.com/stomar/pdfmult/'
 
   COPYRIGHT = "Copyright (C) 2011-2012 Marcus Stollsteimer.\n" +
