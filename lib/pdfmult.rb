@@ -37,6 +37,8 @@
 # -p, --pages:: Number of pages to convert.
 #               If given, +pdfmult+ does not try to obtain the page count from the source PDF.
 #
+# -s, --[no-]silent:: Do not output progress information.
+#
 # -h, --help:: Prints a brief help message and exits.
 #
 # -v, --version:: Prints a brief version information and exits.
@@ -97,6 +99,7 @@ module Pdfmult
         :latex   => false,
         :number  => 2,
         :outfile => nil,
+        :silent  => false,
         :pages   => nil
       }
 
@@ -159,6 +162,10 @@ module Pdfmult
                "If given, #{PROGNAME} does not try to obtain the page count from the source PDF.") do |p|
           raise(OptionParser::InvalidArgument, p)  unless p > 0
           options[:pages] = p
+        end
+
+        opt.on('-s', '--[no-]silent', 'Do not output progress information.') do |s|
+          options[:silent] = s
         end
 
         opt.separator ''
@@ -306,6 +313,7 @@ module Pdfmult
       infile = options[:infile]
       outfile = options[:outfile]
       use_stdout = (outfile == '-')
+      silent = options[:silent]
 
       # test for pdflatex installation
       unless options[:latex]
@@ -336,7 +344,7 @@ module Pdfmult
         if use_stdout
           puts document.to_s
         else
-          warn "Writing on #{outfile}."
+          warn "Writing on #{outfile}."  unless silent
           open(outfile, 'w') {|f| f.write(document.to_s) }
         end
       else
@@ -346,7 +354,7 @@ module Pdfmult
           open("#{dir}/#{texfile}", 'w') {|f| f.write(document.to_s) }
           command = "#{PDFLATEX} -output-directory #{dir} #{texfile}"
           Open3.popen3(command) do |stdin, stdout, stderr|
-            stdout.each_line {|line| warn line.chomp }  # redirect progress messages to stderr
+            stdout.each_line {|line| warn line.chomp }  unless silent # redirect progress messages to stderr
             stderr.read  # make sure all streams are read (and command has finished)
           end
           if use_stdout
@@ -354,7 +362,7 @@ module Pdfmult
               f.each_line {|line| puts line }
             end
           else
-            warn "Writing on #{outfile}."
+            warn "Writing on #{outfile}."  unless silent
             FileUtils::mv("#{dir}/#{pdffile}", outfile)
           end
         end

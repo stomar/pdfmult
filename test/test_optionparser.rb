@@ -18,7 +18,8 @@ describe Pdfmult::Optionparser do
       :latex   => false,
       :number  => 2,
       :outfile => 'sample_2.pdf',
-      :pages   => nil
+      :pages   => nil,
+      :silent  => false
     }
     options.must_equal expected
   end
@@ -63,6 +64,16 @@ describe Pdfmult::Optionparser do
     lambda { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '0.5']) }.must_raise OptionParser::InvalidArgument
     lambda { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '0']) }.must_raise OptionParser::InvalidArgument
     lambda { Pdfmult::Optionparser.parse!(['sample.pdf', '-p', '-1']) }.must_raise OptionParser::InvalidArgument
+  end
+
+  it 'should recognize the -s option' do
+    options = Pdfmult::Optionparser.parse!(['sample.pdf', '-s'])
+    options[:silent].must_equal true
+  end
+
+  it 'should recognize the --no-silent option' do
+    options = Pdfmult::Optionparser.parse!(['sample.pdf', '--no-silent'])
+    options[:silent].must_equal false
   end
 
   it 'should not accept wrong number of arguments' do
