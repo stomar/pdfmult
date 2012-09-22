@@ -1,4 +1,4 @@
-require 'lib/pdfmult'
+require './lib/pdfmult'
 
 version  = Pdfmult::VERSION
 date     = Pdfmult::DATE
