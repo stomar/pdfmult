@@ -7,3 +7,7 @@ pdfmult \- puts multiple copies of a PDF page on one page
  pdfmult sample.pdf -o outfile.pdf  # =>  outfile.pdf  (2 copies)
  pdfmult sample.pdf -p 3            # =>  processes 3 pages
  pdfmult sample.pdf -o - | lpr      # =>  sends output via stdout to print command
+
+[See also]
+The full documentation for pdfmult is available on
+the project home page: <https://github.com/stomar/pdfmult/>.
