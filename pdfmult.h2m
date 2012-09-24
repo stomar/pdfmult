@@ -9,5 +9,5 @@ pdfmult \- puts multiple copies of a PDF page on one page
  pdfmult sample.pdf -o - | lpr      # =>  sends output via stdout to print command
 
 [See also]
-The full documentation for pdfmult is available on
-the project home page: <https://github.com/stomar/pdfmult/>.
+The full documentation for %PROGNAME% is available on
+the project home page: <%HOMEPAGE%>.
