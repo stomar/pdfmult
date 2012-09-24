@@ -3,61 +3,22 @@
 #
 # pdfmult - put multiple copies of a PDF page on one page
 #
-# == Synopsis
-#
-#    pdfmult [options] file
-#
 # == Description
 #
 # +pdfmult+ rearranges multiple copies of a PDF page (shrunken) on one page.
 #
-# The paper size of the produced PDF file is A4,
-# the input file is also assumed to be in A4 format.
-# The input PDF file may consist of several pages.
-# If +pdfmult+ succeeds in obtaining the page count it will rearrange all pages,
-# if not, only the first page is processed
-# (unless the page count was specified via command line option).
+# == See also
 #
-# +pdfmult+ uses +pdflatex+ with the +pdfpages+ package,
-# so both have to be installed on the system.
-# If the --latex option is used, though, +pdflatex+ is not run
-# and a LaTeX file is created instead of a PDF.
+# Use <tt>pdfmult --help</tt> to display a brief help message.
 #
-# == Options
-#
-# -n, --number:: Number of copies to put on one page: 2 (default), 4, 8, 9, 16.
-#
-# -f, --[no-]force:: Do not prompt before overwriting.
-#
-# -l, --latex:: Create a LaTeX file instead of a PDF file (default: infile_NUMBER.tex).
-#
-# -o, --output:: Output file (default: infile_NUMBER.pdf).
-#                Use - to output to stdout.
-#
-# -p, --pages:: Number of pages to convert.
-#               If given, +pdfmult+ does not try to obtain the page count from the source PDF.
-#
-# -s, --[no-]silent:: Do not output progress information.
-#
-# -h, --help:: Prints a brief help message and exits.
-#
-# -v, --version:: Prints a brief version information and exits.
-#
-# == Examples
-#
-#   pdfmult sample.pdf                 # =>  sample_2.pdf (2 copies)
-#   pdfmult -n 4 sample.pdf            # =>  sample_4.pdf (4 copies)
-#   pdfmult sample.pdf -o outfile.pdf  # =>  outfile.pdf  (2 copies)
-#   pdfmult sample.pdf -p 3            # =>  processes 3 pages
-#   pdfmult sample.pdf -o - | lpr      # =>  sends output via stdout to print command
+# The full documentation for +pdfmult+ is available on the
+# project home page.
 #
 # == Author
 #
 # Copyright (C) 2011-2012 Marcus Stollsteimer
 #
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-#
-
 
 require 'optparse'
 require 'tempfile'

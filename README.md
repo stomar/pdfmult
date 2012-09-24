@@ -68,7 +68,7 @@ As of now, `pdfmult` has only been tested on a Linux system.
 Documentation
 -------------
 
-`pdfmult --help` prints a brief help message.
+Use `pdfmult --help` to display a brief help message.
 
 If you installed `pdfmult` using `rake install` you can read
 its man page with `man pdfmult`.
