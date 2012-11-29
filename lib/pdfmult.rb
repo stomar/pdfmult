@@ -22,7 +22,6 @@
 
 require 'optparse'
 require 'tempfile'
-require 'fileutils'
 require 'open3'
 
 # This module contains the classes for the +pdfmult+ tool.
@@ -301,13 +300,9 @@ module Pdfmult
       # create LaTeX document
       document = LaTeXDocument.new(infile, options[:number], pages)
 
+      output = nil
       if options[:latex]
-        if use_stdout
-          puts document.to_s
-        else
-          warn "Writing on #{outfile}."  unless silent
-          open(outfile, 'w') {|f| f.write(document.to_s) }
-        end
+        output = document.to_s
       else
         Dir.mktmpdir('pdfmult') do |dir|
           texfile = 'pdfmult.tex'
@@ -318,16 +313,15 @@ module Pdfmult
             stdout.each_line {|line| warn line.chomp }  unless silent # redirect progress messages to stderr
             stderr.read  # make sure all streams are read (and command has finished)
           end
-          if use_stdout
-            File.open("#{dir}/#{pdffile}") do |f|
-              f.each_line {|line| puts line }
-            end
-          else
-            warn "Writing on #{outfile}."  unless silent
-            FileUtils::mv("#{dir}/#{pdffile}", outfile)
-          end
+          output = File.read("#{dir}/#{pdffile}")
         end
       end
+
+      # redirect stdout to output file
+      $stdout.reopen(outfile, 'w')  unless use_stdout
+
+      warn "Writing on #{outfile}."  unless (use_stdout || silent)
+      puts output
     end
 
     # Asks for yes or no (y/n).
