@@ -330,7 +330,7 @@ module Pdfmult
     #
     # Returns +true+ if the answer is yes.
     def self.ask(question) # :nodoc:
-      while true
+      loop do
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
         return true   if reply == 'y'
