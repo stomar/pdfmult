@@ -31,6 +31,7 @@ module Pdfmult
   VERSION   = '1.3.0'
   DATE      = '2012-09-22'
   HOMEPAGE  = 'https://github.com/stomar/pdfmult/'
+  TAGLINE   = 'puts multiple copies of a PDF page on one page'
 
   COPYRIGHT = "Copyright (C) 2011-2012 Marcus Stollsteimer.\n" +
               "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n" +

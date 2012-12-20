@@ -3,6 +3,7 @@ require './lib/pdfmult'
 version  = Pdfmult::VERSION
 date     = Pdfmult::DATE
 homepage = Pdfmult::HOMEPAGE
+tagline  = Pdfmult::TAGLINE
 
 Gem::Specification.new do |s|
   s.name              = 'pdfmult'
@@ -13,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = 'pdfmult is a command line tool that rearranges ' +
                   'multiple copies of a PDF page (shrunken) on one page. ' +
                   'It is a wrapper for pdflatex with the pdfpages package.'
-  s.summary = 'pdfmult - puts multiple copies of a PDF page on one page'
+  s.summary = "pdfmult - #{tagline}"
 
   s.authors = ['Marcus Stollsteimer']
   s.email = 'sto.mar@web.de'
