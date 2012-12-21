@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w
+#!/usr/bin/env ruby
 # == Name
 #
 # pdfmult - put multiple copies of a PDF page on one page
