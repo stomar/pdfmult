@@ -1,4 +1,3 @@
-#!/usr/bin/ruby -w
 # test_latex_document.rb: Unit tests for the pdfmult script.
 #
 # Copyright (C) 2011-2012 Marcus Stollsteimer
