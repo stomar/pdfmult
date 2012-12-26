@@ -240,31 +240,38 @@ module Pdfmult
 
     PDFINFOCMD = '/usr/bin/pdfinfo'
 
-    # Contains the page count of the input file, or nil.
+    # Returns the page count of the input file, or nil.
     attr_reader :page_count
 
     # This is the initialization method for the class.
     #
     # +file+ - file name of the PDF file
     def initialize(file, options={})
-      @page_count = nil
-      infos = Hash.new
+      @file = file
+      @binary = options[:pdfinfocmd] || PDFINFOCMD  # for unit tests
+      @infos = retrieve_infos
+      @page_count = @infos['Pages'].nil? ? nil : @infos['Pages'].to_i
+    end
 
-      binary = options[:pdfinfocmd] || PDFINFOCMD  # only for unit tests
-      command = "#{binary} #{file}"
-      if Application.command_available?(command)
-        infostring = `#{command}`
-        infostring.each_line do |line|
-          key, val = line.chomp.split(/\s*:\s*/, 2)
-          infos[key] = val
-        end
-        value = infos['Pages']
-        @page_count = value.to_i  unless value.nil?
+    private
+
+    # Tries to retrieve the PDF infos for the file; returns an info hash.
+    def retrieve_infos
+      command = "#{@binary} #{@file}"
+      return {}  unless Application.command_available?(command)
+
+      info_hash = {}
+      info_string = `#{command}`
+      info_string.each_line do |line|
+        key, val = line.chomp.split(/\s*:\s*/, 2)
+        info_hash[key] = val
       end
+
+      info_hash
     end
 
     # Returns true if default +pdfinfo+ system tool is available (for unit tests).
-    def self.infocmd_available? # :nodoc:
+    def self.infocmd_available?
       Application.command_available?("#{PDFINFOCMD} -v")
     end
   end
