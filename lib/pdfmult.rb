@@ -23,6 +23,7 @@
 require 'optparse'
 require 'tempfile'
 require 'open3'
+require 'erb'
 
 # This module contains the classes for the +pdfmult+ tool.
 module Pdfmult
@@ -183,18 +184,17 @@ module Pdfmult
   # The method +to_s+ returns the document as multiline string.
   class LaTeXDocument
 
-    HEADER =
-      "\\documentclass[CLASSOPTIONS]{article}\n" +
-      "\\usepackage{pdfpages}\n" +
-      "\\pagestyle{empty}\n" +
-      "\\setlength{\\parindent}{0pt}\n" +
-      "\\begin{document}%\n"
-
-    CONTENT =
-      "\\includepdf[pages={PAGES},nup=GEOMETRY]{FILENAME}%\n"
-
-    FOOTER =
-      "\\end{document}\n"
+    TEMPLATE = %q(
+      \documentclass[<%= class_options %>]{article}
+      \usepackage{pdfpages}
+      \pagestyle{empty}
+      \setlength{\parindent}{0pt}
+      \begin{document}
+      % pages_strings.each do |pages|
+        \includepdf[pages={<%= pages %>},nup=<%= geometry %>]{<%= @pdffile %>}%
+      % end
+      \end{document}
+    ).gsub(/\A\n/,'').gsub(/^ +/, '')
 
     # Initializes a LaTeXDocument instance.
     #
@@ -202,7 +202,7 @@ module Pdfmult
     # +layout+     - page layout
     # +page_count+ - page count of the input file
     def initialize(infile, layout, page_count)
-      @infile = infile
+      @pdffile = infile
       @layout = layout
       @page_count = page_count
     end
@@ -210,23 +210,23 @@ module Pdfmult
     def to_s
       class_options = "a4paper"
       class_options << ',landscape'  if @layout.landscape?
-      page_string = 'PAGE,' * (@layout.pages - 1) + 'PAGE'  # 4 copies: e.g. 1,1,1,1
+      latex = ERB.new(TEMPLATE, 0, '%<>')
 
-      if RUBY_VERSION =~ /1\.8/
-        content_template = CONTENT.gsub('PAGES', page_string).gsub('GEOMETRY', @layout.geometry).gsub('FILENAME', @infile)
-      else
-        content_template = CONTENT.gsub(/PAGES|GEOMETRY|FILENAME/,
-                                        'PAGES' => page_string,
-                                        'GEOMETRY' => @layout.geometry,
-                                        'FILENAME' => @infile)
-      end
+      latex.result(binding)
+    end
 
-      content = HEADER.gsub(/CLASSOPTIONS/, class_options)
-      @page_count.times do |i|
-        content << content_template.gsub(/PAGE/,"#{i+1}")
-      end
+    private
 
-      content << FOOTER
+    def geometry
+      @layout.geometry
+    end
+
+    # Returns an array of pages strings.
+    # For 4 copies and 2 pages: ["1,1,1,1", "2,2,2,2"].
+    def pages_strings
+      template = 'PAGE,' * (@layout.pages - 1) + 'PAGE'
+
+      Array.new(@page_count) {|i| template.gsub(/PAGE/, "#{i+1}") }
     end
   end
 
