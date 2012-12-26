@@ -214,10 +214,14 @@ module Pdfmult
       class_options << ',landscape'  if @layout.landscape?
       page_string = 'PAGE,' * (@layout.pages - 1) + 'PAGE'  # 4 copies: e.g. 1,1,1,1
 
-      content_template = CONTENT.gsub(/PAGES|GEOMETRY|FILENAME/,
-                                      'PAGES' => page_string,
-                                      'GEOMETRY' => @layout.geometry,
-                                      'FILENAME' => @infile)
+      if RUBY_VERSION =~ /1\.8/
+        content_template = CONTENT.gsub('PAGES', page_string).gsub('GEOMETRY', @layout.geometry).gsub('FILENAME', @infile)
+      else
+        content_template = CONTENT.gsub(/PAGES|GEOMETRY|FILENAME/,
+                                        'PAGES' => page_string,
+                                        'GEOMETRY' => @layout.geometry,
+                                        'FILENAME' => @infile)
+      end
 
       content = HEADER.gsub(/CLASSOPTIONS/, class_options)
       @page_count.times do |i|
