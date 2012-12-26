@@ -147,6 +147,33 @@ module Pdfmult
     end
   end
 
+  # Class for the page layout.
+  #
+  # Create an instance with Layout.new, specifying
+  # the number of pages to put on one page.
+  # Layout#geometry returns the geometry string.
+  class Layout
+
+    attr_reader :pages, :geometry
+
+    GEOMETRY = {
+      2  => '2x1',
+      4  => '2x2',
+      8  => '4x2',
+      9  => '3x3',
+      16 => '4x4'
+    }
+
+    def initialize(pages)
+      @pages = pages
+      @geometry = GEOMETRY[pages]
+    end
+
+    def landscape?
+      ['2x1', '4x2'].include?(geometry)
+    end
+  end
+
   # Class for the LaTeX document.
   #
   # Create an instance with LaTeXDocument.new, specifying
@@ -156,7 +183,7 @@ module Pdfmult
   # The method +to_s+ returns the document as multiline string.
   class LaTeXDocument
 
-    attr_accessor :infile, :number, :page_count
+    attr_accessor :infile, :layout, :page_count
 
     HEADER =
       "\\documentclass[CLASSOPTIONS]{article}\n" +
@@ -174,36 +201,22 @@ module Pdfmult
     # Initializes a LaTeXDocument instance.
     #
     # +infile+     - input file name
-    # +number+     - number of pages to put on one page
+    # +layout+     - page layout
     # +page_count+ - page count of the input file
-    def initialize(infile, number, page_count)
+    def initialize(infile, layout, page_count)
       @infile = infile
-      @number = number
+      @layout = layout
       @page_count = page_count
     end
 
     def to_s
-      class_options = 'a4paper'
-      page_string = 'PAGE,' * (@number - 1) + 'PAGE'  # 4 copies: e.g. 1,1,1,1
-
-      case @number
-      when 2
-        class_options << ',landscape'
-        geometry = '2x1'
-      when 4
-        geometry = '2x2'
-      when 8
-        class_options << ',landscape'
-        geometry = '4x2'
-      when 9
-        geometry = '3x3'
-      when 16
-        geometry = '4x4'
-      end
+      class_options = "a4paper"
+      class_options << ',landscape'  if @layout.landscape?
+      page_string = 'PAGE,' * (@layout.pages - 1) + 'PAGE'  # 4 copies: e.g. 1,1,1,1
 
       content_template = CONTENT.gsub(/PAGES|GEOMETRY|FILENAME/,
                                       'PAGES' => page_string,
-                                      'GEOMETRY' => geometry,
+                                      'GEOMETRY' => @layout.geometry,
                                       'FILENAME' => @infile)
 
       content = HEADER.gsub(/CLASSOPTIONS/, class_options)
@@ -299,7 +312,8 @@ module Pdfmult
       pages ||= 1
 
       # create LaTeX document
-      document = LaTeXDocument.new(infile, options[:number], pages)
+      layout = Layout.new(options[:number])
+      document = LaTeXDocument.new(infile, layout, pages)
 
       output = nil
       if options[:latex]
