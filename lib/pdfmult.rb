@@ -183,8 +183,6 @@ module Pdfmult
   # The method +to_s+ returns the document as multiline string.
   class LaTeXDocument
 
-    attr_accessor :infile, :layout, :page_count
-
     HEADER =
       "\\documentclass[CLASSOPTIONS]{article}\n" +
       "\\usepackage{pdfpages}\n" +
