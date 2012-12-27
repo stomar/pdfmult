@@ -260,14 +260,9 @@ module Pdfmult
       command = "#{@binary} #{@file}"
       return {}  unless Application.command_available?(command)
 
-      info_hash = {}
-      info_string = `#{command}`
-      info_string.each_line do |line|
-        key, val = line.chomp.split(/\s*:\s*/, 2)
-        info_hash[key] = val
-      end
+      info_array = `#{command}`.split(/\n/)
 
-      info_hash
+      Hash[info_array.map {|line| line.split(/\s*:\s*/, 2) }]
     end
 
     # Returns true if default +pdfinfo+ system tool is available (for unit tests).
