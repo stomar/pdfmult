@@ -197,14 +197,15 @@ module Pdfmult
     ).gsub(/\A\n/,'').gsub(/^ +/, '')
 
     # Initializes a LaTeXDocument instance.
+    # Expects an argument hash with:
     #
-    # +infile+     - input file name
-    # +layout+     - page layout
-    # +page_count+ - page count of the input file
-    def initialize(infile, layout, page_count)
-      @pdffile = infile
-      @layout = layout
-      @page_count = page_count
+    # +:pdffile+    - filename of input pdf file
+    # +:layout+     - page layout
+    # +:page_count+ - page count of the input file
+    def initialize(args)
+      @pdffile    = args[:pdffile]
+      @layout     = args[:layout]
+      @page_count = args[:page_count]
     end
 
     def to_s
@@ -316,8 +317,12 @@ module Pdfmult
       pages ||= 1
 
       # create LaTeX document
-      layout = Layout.new(options[:number])
-      document = LaTeXDocument.new(infile, layout, pages)
+      args = {
+        :pdffile    => infile,
+        :layout     => Layout.new(options[:number]),
+        :page_count => pages
+      }
+      document = LaTeXDocument.new(args)
 
       output = nil
       if options[:latex]

@@ -14,20 +14,26 @@ describe Pdfmult::LaTeXDocument do
   end
 
   it 'should return the expected LaTeX code for 4 pages' do
-    layout = @layout_class.new(4)
-    page_count = 3
-    document_lines = Pdfmult::LaTeXDocument.new('sample.pdf', layout, page_count).to_s.split(/\n/)
+    args = {
+      :pdffile    => 'sample.pdf',
+      :layout     => @layout_class.new(4),
+      :page_count => 3
+    }
+    document_lines = Pdfmult::LaTeXDocument.new(args).to_s.split(/\n/)
     document_lines[0].must_equal  '\documentclass[a4paper]{article}'
     document_lines[-2].must_equal '\includepdf[pages={3,3,3,3},nup=2x2]{sample.pdf}%'
-    document_lines.grep(/includepdf/).size.must_equal page_count
+    document_lines.grep(/includepdf/).size.must_equal args[:page_count]
   end
 
   it 'should return the expected LaTeX code for 8 pages' do
-    layout = @layout_class.new(8)
-    page_count = 5
-    document_lines = Pdfmult::LaTeXDocument.new('sample.pdf', layout, page_count).to_s.split(/\n/)
+    args = {
+      :pdffile    => 'sample.pdf',
+      :layout     => @layout_class.new(8),
+      :page_count => 5
+    }
+    document_lines = Pdfmult::LaTeXDocument.new(args).to_s.split(/\n/)
     document_lines[0].must_equal  '\documentclass[a4paper,landscape]{article}'
     document_lines[-2].must_equal '\includepdf[pages={5,5,5,5,5,5,5,5},nup=4x2]{sample.pdf}%'
-    document_lines.grep(/includepdf/).size.must_equal page_count
+    document_lines.grep(/includepdf/).size.must_equal args[:page_count]
   end
 end
