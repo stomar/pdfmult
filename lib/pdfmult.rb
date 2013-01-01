@@ -251,7 +251,7 @@ module Pdfmult
       @file = file
       @binary = options[:pdfinfocmd] || PDFINFOCMD  # for unit tests
       @infos = retrieve_infos
-      @page_count = @infos['Pages'].nil? ? nil : @infos['Pages'].to_i
+      @page_count = @infos['Pages'] && @infos['Pages'].to_i
     end
 
     private
