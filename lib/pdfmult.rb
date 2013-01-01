@@ -312,9 +312,7 @@ module Pdfmult
       end
 
       # set page number (get PDF info if necessary)
-      pages = options[:pages]
-      pages ||= PDFInfo.new(infile).page_count
-      pages ||= 1
+      pages = options[:pages] || PDFInfo.new(infile).page_count || 1
 
       # create LaTeX document
       args = {
