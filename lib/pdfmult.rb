@@ -135,7 +135,7 @@ module Pdfmult
       opt_parser.parse!(argv)
 
       # only input file should be left in argv
-      raise(ArgumentError, 'wrong number of arguments')  if (argv.size != 1 || argv[0] == '')
+      raise(ArgumentError, 'wrong number of arguments')  if (argv.size != 1 || argv[0].empty?)
 
       options[:infile] = argv.pop
 
