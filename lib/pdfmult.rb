@@ -16,7 +16,7 @@
 #
 # == Author
 #
-# Copyright (C) 2011-2012 Marcus Stollsteimer
+# Copyright (C) 2011-2013 Marcus Stollsteimer
 #
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 
@@ -34,7 +34,7 @@ module Pdfmult
   HOMEPAGE  = 'https://github.com/stomar/pdfmult/'
   TAGLINE   = 'puts multiple copies of a PDF page on one page'
 
-  COPYRIGHT = "Copyright (C) 2011-2012 Marcus Stollsteimer.\n" +
+  COPYRIGHT = "Copyright (C) 2011-2013 Marcus Stollsteimer.\n" +
               "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n" +
               "This is free software: you are free to change and redistribute it.\n" +
               "There is NO WARRANTY, to the extent permitted by law."

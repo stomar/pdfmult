@@ -1,6 +1,6 @@
 # rakefile for the pdfmult script.
 #
-# Copyright (C) 2012 Marcus Stollsteimer
+# Copyright (C) 2011-2013 Marcus Stollsteimer
 
 require 'rake/testtask'
 
