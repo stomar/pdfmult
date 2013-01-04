@@ -29,8 +29,8 @@ require 'erb'
 module Pdfmult
 
   PROGNAME  = 'pdfmult'
-  VERSION   = '1.3.0'
-  DATE      = '2012-09-22'
+  VERSION   = '1.3.1'
+  DATE      = '2013-01-04'
   HOMEPAGE  = 'https://github.com/stomar/pdfmult/'
   TAGLINE   = 'puts multiple copies of a PDF page on one page'
 
