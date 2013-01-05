@@ -306,7 +306,7 @@ module Pdfmult
       usage_fail("specified input not of the type `file'")  unless File.ftype(infile) == 'file'
 
       # test for existing output file
-      if !use_stdout and !options[:force] and File.exist?(outfile)
+      if !use_stdout && !options[:force] && File.exist?(outfile)
         overwrite_ok = ask("File `#{outfile}' already exists. Overwrite?")
         exit  unless overwrite_ok
       end
