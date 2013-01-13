@@ -279,51 +279,52 @@ module Pdfmult
 
     ERRORCODE = {:general => 1, :usage => 2}
 
-    # The main program.
-    def self.run!
-
-      # parse options
+    def initialize
       begin
         options = Optionparser.parse!(ARGV)
       rescue => e
         usage_fail(e.message)
       end
+      @infile = options[:infile]
+      @outfile = options[:outfile]
+      @use_stdout = (@outfile == '-')
+      @silent = options[:silent]
+      @force = options[:force]
+      @latex = options[:latex]
+      @number = options[:number]
+      @pages = options[:pages] || PDFInfo.new(@infile).page_count || 1
+    end
 
-      infile = options[:infile]
-      outfile = options[:outfile]
-      use_stdout = (outfile == '-')
-      silent = options[:silent]
+    # The main program.
+    def run!
 
       # test for pdflatex installation
-      unless options[:latex]
+      unless @latex
         message = 'seems not to be installed (you might try using the -l option)'
-        general_fail("`#{PDFLATEX}' #{message}")  unless command_available?("#{PDFLATEX} --version")
-        general_fail("`pdfpages.sty' #{message}")  unless command_available?("#{KPSEWHICH} pdfpages.sty")
+        general_fail("`#{PDFLATEX}' #{message}")  unless self.class.command_available?("#{PDFLATEX} --version")
+        general_fail("`pdfpages.sty' #{message}")  unless self.class.command_available?("#{KPSEWHICH} pdfpages.sty")
       end
 
       # test input file
-      usage_fail("no such file: `#{infile}'")  unless File.exist?(infile)
-      usage_fail("specified input not of the type `file'")  unless File.ftype(infile) == 'file'
+      usage_fail("no such file: `#{@infile}'")  unless File.exist?(@infile)
+      usage_fail("specified input not of the type `file'")  unless File.ftype(@infile) == 'file'
 
       # test for existing output file
-      if !use_stdout && !options[:force] && File.exist?(outfile)
-        overwrite_ok = ask("File `#{outfile}' already exists. Overwrite?")
+      if !@use_stdout && !@force && File.exist?(@outfile)
+        overwrite_ok = ask("File `#{@outfile}' already exists. Overwrite?")
         exit  unless overwrite_ok
       end
 
-      # set page number (get PDF info if necessary)
-      pages = options[:pages] || PDFInfo.new(infile).page_count || 1
-
       # create LaTeX document
       args = {
-        :pdffile    => infile,
-        :layout     => Layout.new(options[:number]),
-        :page_count => pages
+        :pdffile    => @infile,
+        :layout     => Layout.new(@number),
+        :page_count => @pages
       }
       document = LaTeXDocument.new(args)
 
       output = nil
-      if options[:latex]
+      if @latex
         output = document.to_s
       else
         Dir.mktmpdir('pdfmult') do |dir|
@@ -332,7 +333,7 @@ module Pdfmult
           open("#{dir}/#{texfile}", 'w') {|f| f.write(document.to_s) }
           command = "#{PDFLATEX} -output-directory #{dir} #{texfile}"
           Open3.popen3(command) do |stdin, stdout, stderr|
-            stdout.each_line {|line| warn line.chomp }  unless silent # redirect progress messages to stderr
+            stdout.each_line {|line| warn line.chomp }  unless @silent # redirect progress messages to stderr
             stderr.read  # make sure all streams are read (and command has finished)
           end
           output = File.read("#{dir}/#{pdffile}")
@@ -340,18 +341,20 @@ module Pdfmult
       end
 
       # redirect stdout to output file
-      $stdout.reopen(outfile, 'w')  unless use_stdout
+      $stdout.reopen(@outfile, 'w')  unless @use_stdout
 
-      warn "Writing on #{outfile}."  unless (use_stdout || silent)
+      warn "Writing on #{@outfile}."  unless (@use_stdout || @silent)
       puts output
     end
+
+    private
 
     # Asks for yes or no (y/n).
     #
     # +question+ - string to be printed
     #
     # Returns +true+ if the answer is yes.
-    def self.ask(question) # :nodoc:
+    def ask(question)
       loop do
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
@@ -362,13 +365,13 @@ module Pdfmult
     end
 
     # Prints an error message and exits.
-    def self.general_fail(message) # :nodoc:
+    def general_fail(message)
       warn "#{PROGNAME}: #{message}"
       exit ERRORCODE[:general]
     end
 
     # Prints an error message and a short help information, then exits.
-    def self.usage_fail(message) # :nodoc:
+    def usage_fail(message)
       warn "#{PROGNAME}: #{message}"
       warn "Use `#{PROGNAME} --help' for valid options."
       exit ERRORCODE[:usage]
@@ -385,7 +388,7 @@ module Pdfmult
 ### call main method only if called on command line
 
 if __FILE__ == $0
-  Application.run!
+  Application.new.run!
 end
 
 end  # module

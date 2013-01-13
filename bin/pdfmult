@@ -2,4 +2,4 @@
 
 require 'pdfmult'
 
-Pdfmult::Application.run!
+Pdfmult::Application.new.run!
