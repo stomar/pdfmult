@@ -60,7 +60,7 @@ As of now, `pdfmult` has only been tested on a Linux system.
 
 - `pdfmult` is written in [Ruby][Ruby], so Ruby must be installed on your system.
 - `pdfmult` uses `pdflatex` with the `pdfpages` package, so both have to be installed on the system.
-  (If `pdfmult` can not find the `pdflatex` command on your system
+  (If `pdfmult` cannot find the `pdflatex` command on your system
   you might want to use the `--latex` option.)
 - `pdfmult` tries to obtain the page count of PDF files with `pdfinfo`.
   If it fails, by default only the first page of a PDF file will be processed.
