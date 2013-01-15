@@ -209,7 +209,7 @@ module Pdfmult
     end
 
     def to_s
-      class_options = "a4paper"
+      class_options = 'a4paper'
       class_options << ',landscape'  if @layout.landscape?
       latex = ERB.new(TEMPLATE, 0, '%<>')
 
