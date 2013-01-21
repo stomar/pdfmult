@@ -251,8 +251,8 @@ module Pdfmult
     def initialize(file, options={})
       @file = file
       @binary = options[:pdfinfocmd] || PDFINFOCMD  # for unit tests
-      @infos = retrieve_infos
-      @page_count = @infos['Pages'] && @infos['Pages'].to_i
+      infos = retrieve_infos
+      @page_count = infos['Pages'] && infos['Pages'].to_i
     end
 
     private
