@@ -183,6 +183,8 @@ module Pdfmult
   # The method +to_s+ returns the document as multiline string.
   class LaTeXDocument
 
+    attr_reader :pdffile, :layout, :page_count
+
     TEMPLATE = %q(
       \documentclass[<%= class_options %>]{article}
       \usepackage{pdfpages}
@@ -190,7 +192,7 @@ module Pdfmult
       \setlength{\parindent}{0pt}
       \begin{document}
       % pages_strings.each do |pages|
-        \includepdf[pages={<%= pages %>},nup=<%= geometry %>]{<%= @pdffile %>}%
+        \includepdf[pages={<%= pages %>},nup=<%= geometry %>]{<%= pdffile %>}%
       % end
       \end{document}
     ).gsub(/\A\n/,'').gsub(/^ +/, '')
@@ -209,7 +211,7 @@ module Pdfmult
 
     def to_s
       class_options = 'a4paper'
-      class_options << ',landscape'  if @layout.landscape?
+      class_options << ',landscape'  if layout.landscape?
       latex = ERB.new(TEMPLATE, 0, '%<>')
 
       latex.result(binding)
@@ -218,15 +220,15 @@ module Pdfmult
     private
 
     def geometry
-      @layout.geometry
+      layout.geometry
     end
 
     # Returns an array of pages strings.
     # For 4 copies and 2 pages: ["1,1,1,1", "2,2,2,2"].
     def pages_strings
-      template = 'PAGE,' * (@layout.pages - 1) + 'PAGE'
+      template = 'PAGE,' * (layout.pages - 1) + 'PAGE'
 
-      Array.new(@page_count) {|i| template.gsub(/PAGE/, "#{i+1}") }
+      Array.new(page_count) {|i| template.gsub(/PAGE/, "#{i+1}") }
     end
   end
 
