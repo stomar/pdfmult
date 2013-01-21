@@ -177,9 +177,8 @@ module Pdfmult
 
   # Class for the LaTeX document.
   #
-  # Create an instance with LaTeXDocument.new, specifying
-  # the input file, the number of pages to put on one page,
-  # and the page count of the input file.
+  # Create an instance with LaTeXDocument.new, specifying the
+  # input file, the layout, and the page count of the input file.
   #
   # The method +to_s+ returns the document as multiline string.
   class LaTeXDocument
