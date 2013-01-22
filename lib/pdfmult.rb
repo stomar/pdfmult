@@ -223,12 +223,16 @@ module Pdfmult
       layout.geometry
     end
 
+    def pages_per_sheet
+      layout.pages
+    end
+
     # Returns an array of pages strings.
     # For 4 copies and 2 pages: ["1,1,1,1", "2,2,2,2"].
     def pages_strings
-      template = 'PAGE,' * (layout.pages - 1) + 'PAGE'
+      pages = (1..page_count).to_a
 
-      Array.new(page_count) {|i| template.gsub(/PAGE/, "#{i+1}") }
+      pages.map {|page| ([page] * pages_per_sheet).join(',') }
     end
   end
 
