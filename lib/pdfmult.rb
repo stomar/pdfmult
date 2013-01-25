@@ -316,7 +316,7 @@ module Pdfmult
 
       # test for existing output file
       if !@use_stdout && !@force && File.exist?(@outfile)
-        overwrite_ok = ask("File `#{@outfile}' already exists. Overwrite?")
+        overwrite_ok = confirm("File `#{@outfile}' already exists. Overwrite?")
         exit  unless overwrite_ok
       end
 
@@ -359,12 +359,11 @@ module Pdfmult
     # +question+ - string to be printed
     #
     # Returns +true+ if the answer is yes.
-    def ask(question)
+    def confirm(question)
       loop do
         $stderr.print "#{question} [y/n] "
-        reply = $stdin.gets.chomp.downcase  # $stdin: avoids gets / ARGV problem
-        return true   if reply == 'y'
-        return false  if reply == 'n'
+        reply = $stdin.gets.chomp.downcase  # $stdin avoids gets/ARGV problem
+        return reply == 'y'  if /\A[yn]\Z/ =~ reply
         warn "Please answer `y' or `n'."
       end
     end
