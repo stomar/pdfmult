@@ -388,11 +388,10 @@ module Pdfmult
       !!system("#{command} >/dev/null 2>&1")
     end
   end
+end  # module
 
 ### call main method only if called on command line
 
 if __FILE__ == $0
-  Application.new.run!
+  Pdfmult::Application.new.run!
 end
-
-end  # module
