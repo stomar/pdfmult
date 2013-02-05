@@ -34,10 +34,12 @@ module Pdfmult
   HOMEPAGE  = 'https://github.com/stomar/pdfmult/'
   TAGLINE   = 'puts multiple copies of a PDF page on one page'
 
-  COPYRIGHT = "Copyright (C) 2011-2013 Marcus Stollsteimer.\n" +
-              "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n" +
-              "This is free software: you are free to change and redistribute it.\n" +
-              "There is NO WARRANTY, to the extent permitted by law."
+  COPYRIGHT = <<-copyright.gsub(/^ +/, '')
+    Copyright (C) 2011-2013 Marcus Stollsteimer.
+    License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+    This is free software: you are free to change and redistribute it.
+    There is NO WARRANTY, to the extent permitted by law.
+  copyright
 
   PDFLATEX  = '/usr/bin/pdflatex'
   KPSEWHICH = '/usr/bin/kpsewhich'
@@ -67,24 +69,24 @@ module Pdfmult
 
       opt_parser = OptionParser.new do |opt|
         opt.banner = "Usage: #{PROGNAME} [options] file"
-        opt.separator ''
-        opt.separator 'pdfmult is a command line tool that'
-        opt.separator 'rearranges multiple copies of a PDF page (shrunken) on one page.'
-        opt.separator ''
-        opt.separator 'The paper size of the produced PDF file is A4,'
-        opt.separator 'the input file is also assumed to be in A4 format.'
-        opt.separator 'The input PDF file may consist of several pages.'
-        opt.separator 'If pdfmult succeeds in obtaining the page count it will rearrange all pages,'
-        opt.separator 'if not, only the first page is processed'
-        opt.separator '(unless the page count was specified via command line option).'
-        opt.separator ''
-        opt.separator 'pdfmult uses pdflatex with the pdfpages package,'
-        opt.separator 'so both have to be installed on the system.'
-        opt.separator 'If the --latex option is used, though, pdflatex is not run'
-        opt.separator 'and a LaTeX file is created instead of a PDF.'
-        opt.separator ''
-        opt.separator 'Options'
-        opt.separator ''
+        opt.separator %q{
+          pdfmult is a command line tool that
+          rearranges multiple copies of a PDF page (shrunken) on one page.
+
+          The paper size of the produced PDF file is A4,
+          the input file is also assumed to be in A4 format.
+          The input PDF file may consist of several pages.
+          If pdfmult succeeds in obtaining the page count it will rearrange all pages,
+          if not, only the first page is processed
+          (unless the page count was specified via command line option).
+
+          pdfmult uses pdflatex with the pdfpages package,
+          so both have to be installed on the system.
+          If the --latex option is used, though, pdflatex is not run
+          and a LaTeX file is created instead of a PDF.
+
+          Options
+        }.gsub(/^ +/, '')
 
         # process --version and --help first,
         # exit successfully (GNU Coding Standards)
