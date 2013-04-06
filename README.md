@@ -23,13 +23,13 @@ Use the program as shown in the examples below.
 
     writes 2 copies of `sample.pdf` to `sample_2.pdf`
 
-    <img src="https://github.com/stomar/pdfmult/raw/master/example1.png" alt="" width="152" height="59">
+    <img src="example1.png" alt="" width="152" height="59">
 
 * `pdfmult -n 4 sample.pdf`
 
     writes 4 copies of `sample.pdf` to `sample_4.pdf`
 
-    <img src="https://github.com/stomar/pdfmult/raw/master/example2.png" alt="" width="234" height="59">
+    <img src="example2.png" alt="" width="234" height="59">
 
 * `pdfmult sample.pdf -o outfile.pdf`
 
