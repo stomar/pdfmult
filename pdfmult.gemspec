@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
   s.name              = 'pdfmult'
   s.version           = version
   s.date              = date
-  s.rubyforge_project = 'pdfmult'
 
   s.description = 'pdfmult is a command line tool that rearranges ' +
                   'multiple copies of a PDF page (shrunken) on one page. ' +
@@ -24,12 +23,15 @@ Gem::Specification.new do |s|
 
   s.requirements << 'pdflatex and the pdfpages package'
 
+  s.add_development_dependency('rake')
+  s.add_development_dependency('minitest')
+
   s.executables = ['pdfmult']
   s.bindir = 'bin'
-  s.require_path = 'lib'
-  s.test_files = Dir.glob('test/**/test_*.rb')
 
-  s.rdoc_options = ['--charset=UTF-8']
+  s.require_path = 'lib'
+
+  s.test_files = Dir.glob('test/**/test_*.rb')
 
   s.files = %w{
       README.md
@@ -40,6 +42,5 @@ Gem::Specification.new do |s|
     Dir.glob('example*.*') +
     Dir.glob('{bin,lib,man,test}/**/*')
 
-  s.add_development_dependency('rake')
-  s.add_development_dependency('minitest')
+  s.rdoc_options = ['--charset=UTF-8']
 end
