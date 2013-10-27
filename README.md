@@ -46,7 +46,7 @@ Use the program as shown in the examples below.
 Installation
 ------------
 
-Use `gem install pdfmult`.
+Use `gem install pdfmult` to install from RubyGems.org.
 
 Or copy `lib/pdfmult.rb` under the name `pdfmult` into your search path.
 
