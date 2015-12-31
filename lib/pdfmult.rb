@@ -85,7 +85,7 @@ module Pdfmult
           If the --latex option is used, though, pdflatex is not run
           and a LaTeX file is created instead of a PDF.
 
-          Options
+          Options:
         }.gsub(/^ +/, '')
 
         # process --version and --help first,
