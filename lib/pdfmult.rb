@@ -212,8 +212,6 @@ module Pdfmult
     end
 
     def to_s
-      class_options = 'a4paper'
-      class_options << ',landscape'  if layout.landscape?
       latex = ERB.new(TEMPLATE, 0, '%<>')
 
       latex.result(binding)
@@ -223,6 +221,10 @@ module Pdfmult
 
     def geometry
       layout.geometry
+    end
+
+    def class_options
+      layout.landscape? ? "a4paper,landscape" : "a4paper"
     end
 
     def pages_per_sheet
