@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.executables = ['pdfmult']
   s.bindir = 'bin'
 
-  s.require_path = 'lib'
+  s.require_paths = ['lib']
 
   s.test_files = Dir.glob('test/**/test_*.rb')
 
