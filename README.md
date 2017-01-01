@@ -81,7 +81,7 @@ Report bugs on the `pdfmult` home page: <https://github.com/stomar/pdfmult/>
 License
 -------
 
-Copyright &copy; 2011-2016 Marcus Stollsteimer
+Copyright &copy; 2011-2017 Marcus Stollsteimer
 
 `pdfmult` is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 3 or later (GPLv3+),

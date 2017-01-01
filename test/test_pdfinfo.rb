@@ -1,6 +1,6 @@
 # test_pdfinfo.rb: Unit tests for the pdfmult script.
 #
-# Copyright (C) 2011-2016 Marcus Stollsteimer
+# Copyright (C) 2011-2017 Marcus Stollsteimer
 
 require 'minitest/autorun'
 require 'pdfmult'
