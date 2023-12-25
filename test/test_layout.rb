@@ -1,7 +1,3 @@
-# test_layout.rb: Unit tests for the pdfmult script.
-#
-# Copyright (C) 2011-2018 Marcus Stollsteimer
-
 require 'minitest/autorun'
 require 'pdfmult'
 
