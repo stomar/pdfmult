@@ -212,7 +212,7 @@ module Pdfmult
     end
 
     def to_s
-      latex = ERB.new(TEMPLATE, 0, '%<>')
+      latex = ERB.new(TEMPLATE, trim_mode: "%<>")
 
       latex.result(binding)
     end
