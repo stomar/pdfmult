@@ -70,7 +70,7 @@ module Pdfmult
 
       opt_parser = OptionParser.new do |opt|
         opt.banner = "Usage: #{PROGNAME} [options] file"
-        opt.separator %q{
+        opt.separator "
           pdfmult is a command line tool that
           rearranges multiple copies of a PDF page (shrunken) on one page.
 
@@ -87,7 +87,7 @@ module Pdfmult
           and a LaTeX file is created instead of a PDF.
 
           Options:
-        }.gsub(/^ +/, "")
+        ".gsub(/^ +/, "")
 
         # process --version and --help first,
         # exit successfully (GNU Coding Standards)
@@ -104,7 +104,7 @@ module Pdfmult
           exit
         end
 
-        opt.on("-n", "--number NUMBER", ["2", "4", "8", "9", "16"], Integer,
+        opt.on("-n", "--number NUMBER", %w[2 4 8 9 16], Integer,
                "Number of copies to put on one page: 2 (default), 4, 8, 9, 16.") do |n|
           options[:number] = n
         end
@@ -125,7 +125,7 @@ module Pdfmult
         opt.on("-p", "--pages NUMBER", Integer,
                "Number of pages to convert.",
                "If given, #{PROGNAME} does not try to obtain the page count from the source PDF.") do |p|
-          raise(OptionParser::InvalidArgument, p)  unless p > 0
+          raise(OptionParser::InvalidArgument, p)  unless p.positive?
 
           options[:pages] = p
         end
@@ -139,7 +139,7 @@ module Pdfmult
       opt_parser.parse!(argv)
 
       # only input file should be left in argv
-      raise(ArgumentError, "wrong number of arguments")  if (argv.size != 1 || argv[0].empty?)
+      raise(ArgumentError, "wrong number of arguments")  if argv.size != 1 || argv[0].empty?
 
       options[:infile] = argv.pop
 
@@ -175,7 +175,7 @@ module Pdfmult
     end
 
     def landscape?
-      ["2x1", "4x2"].include?(geometry)
+      %w[2x1 4x2].include?(geometry)
     end
   end
 
@@ -353,7 +353,7 @@ module Pdfmult
       # redirect stdout to output file
       $stdout.reopen(@outfile, "w")  unless @use_stdout
 
-      warn "Writing on #{@outfile}."  unless (@use_stdout || @silent)
+      warn "Writing on #{@outfile}."  unless @use_stdout || @silent
       puts output
     end
 
@@ -394,10 +394,10 @@ module Pdfmult
       !!system("#{command} >/dev/null 2>&1")
     end
   end
-end  # module
+end
 
 ### call main method only if called on command line
 
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   Pdfmult::Application.new.run!
 end
