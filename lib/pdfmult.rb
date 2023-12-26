@@ -167,7 +167,7 @@ module Pdfmult
       8 => "4x2",
       9 => "3x3",
       16 => "4x4"
-    }
+    }.freeze
 
     def initialize(pages)
       @pages = pages
@@ -288,7 +288,7 @@ module Pdfmult
   # It parses the command line arguments and does the job.
   class Application
 
-    ERRORCODE = { general: 1, usage: 2 }
+    ERRORCODE = { general: 1, usage: 2 }.freeze
 
     def initialize
       begin
