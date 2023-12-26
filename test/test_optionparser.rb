@@ -7,13 +7,13 @@ describe Pdfmult::Optionparser do
   it "should return the correct default values" do
     options = Pdfmult::Optionparser.parse!(["sample.pdf"])
     expected = {
-      :force   => false,
-      :infile  => "sample.pdf",
-      :latex   => false,
-      :number  => 2,
-      :outfile => "sample_2.pdf",
-      :pages   => nil,
-      :silent  => false
+      force: false,
+      infile: "sample.pdf",
+      latex: false,
+      number: 2,
+      outfile: "sample_2.pdf",
+      pages: nil,
+      silent: false
     }
     _(options).must_equal expected
   end

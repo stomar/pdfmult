@@ -10,9 +10,9 @@ describe Pdfmult::LaTeXDocument do
 
   it "should return the expected LaTeX code for 4 pages" do
     args = {
-      :pdffile    => "sample.pdf",
-      :layout     => @layout_class.new(4),
-      :page_count => 3
+      pdffile: "sample.pdf",
+      layout: @layout_class.new(4),
+      page_count: 3
     }
     document_lines = Pdfmult::LaTeXDocument.new(args).to_s.split(/\n/)
     _(document_lines[0]).must_equal  '\documentclass[a4paper]{article}'
@@ -22,9 +22,9 @@ describe Pdfmult::LaTeXDocument do
 
   it "should return the expected LaTeX code for 8 pages" do
     args = {
-      :pdffile    => "sample.pdf",
-      :layout     => @layout_class.new(8),
-      :page_count => 5
+      pdffile: "sample.pdf",
+      layout: @layout_class.new(8),
+      page_count: 5
     }
     document_lines = Pdfmult::LaTeXDocument.new(args).to_s.split(/\n/)
     _(document_lines[0]).must_equal  '\documentclass[a4paper,landscape]{article}'

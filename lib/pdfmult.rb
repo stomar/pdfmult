@@ -58,13 +58,13 @@ module Pdfmult
     def self.parse!(argv)
 
       options = {
-        :force   => false,
-        :infile  => nil,
-        :latex   => false,
-        :number  => 2,
-        :outfile => nil,
-        :silent  => false,
-        :pages   => nil
+        force: false,
+        infile: nil,
+        latex: false,
+        number: 2,
+        outfile: nil,
+        silent: false,
+        pages: nil
       }
 
       opt_parser = OptionParser.new do |opt|
@@ -286,7 +286,7 @@ module Pdfmult
   # It parses the command line arguments and does the job.
   class Application
 
-    ERRORCODE = {:general => 1, :usage => 2}
+    ERRORCODE = {general: 1, usage: 2}
 
     def initialize
       begin
@@ -326,9 +326,9 @@ module Pdfmult
 
       # create LaTeX document
       args = {
-        :pdffile    => @infile,
-        :layout     => Layout.new(@number),
-        :page_count => @pages
+        pdffile: @infile,
+        layout: Layout.new(@number),
+        page_count: @pages
       }
       document = LaTeXDocument.new(args)
 

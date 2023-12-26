@@ -15,7 +15,7 @@ describe Pdfmult::PDFInfo do
       infocmd = Pdfmult::PDFInfo::PDFINFOCMD
       skip("Skipped: `#{infocmd}' not available on the system")  unless Pdfmult::PDFInfo.infocmd_available?
       _(Pdfmult::PDFInfo.new(@sample_pdf).page_count).must_equal 3
-      _(Pdfmult::PDFInfo.new(@sample_pdf, :pdfinfocmd => infocmd).page_count).must_equal 3
+      _(Pdfmult::PDFInfo.new(@sample_pdf, pdfinfocmd: infocmd).page_count).must_equal 3
     end
 
     it "should return nil for non-existent files" do
@@ -23,7 +23,7 @@ describe Pdfmult::PDFInfo do
     end
 
     it "should return nil for non-existent `pdfinfo' system tool" do
-      _(Pdfmult::PDFInfo.new(@sample_pdf, :pdfinfocmd => "not_a_command").page_count).must_be_nil
+      _(Pdfmult::PDFInfo.new(@sample_pdf, pdfinfocmd: "not_a_command").page_count).must_be_nil
     end
   end
 end
