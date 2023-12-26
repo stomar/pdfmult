@@ -56,7 +56,6 @@ module Pdfmult
     #
     # Returns a hash containing the option parameters.
     def self.parse!(argv)
-
       options = {
         force: false,
         infile: nil,
@@ -125,6 +124,7 @@ module Pdfmult
                "Number of pages to convert.",
                "If given, #{PROGNAME} does not try to obtain the page count from the source PDF.") do |p|
           raise(OptionParser::InvalidArgument, p)  unless p > 0
+
           options[:pages] = p
         end
 
@@ -160,10 +160,10 @@ module Pdfmult
     attr_reader :pages, :geometry
 
     GEOMETRY = {
-      2  => "2x1",
-      4  => "2x2",
-      8  => "4x2",
-      9  => "3x3",
+      2 => "2x1",
+      4 => "2x2",
+      8 => "4x2",
+      9 => "3x3",
       16 => "4x4"
     }
 
@@ -197,7 +197,7 @@ module Pdfmult
         \includepdf[pages={<%= pages %>},nup=<%= geometry %>]{<%= pdffile %>}%
       % end
       \end{document}
-    ).gsub(/\A\n/,"").gsub(/^ +/, "")
+    ).gsub(/\A\n/, "").gsub(/^ +/, "")
 
     # Initializes a LaTeXDocument instance.
     # Expects an argument hash with:
@@ -256,7 +256,7 @@ module Pdfmult
     # This is the initialization method for the class.
     #
     # +file+ - file name of the PDF file
-    def initialize(file, options={})
+    def initialize(file, options = {})
       @file = file
       @binary = options[:pdfinfocmd] || PDFINFOCMD  # for unit tests
       infos = retrieve_infos
@@ -286,7 +286,7 @@ module Pdfmult
   # It parses the command line arguments and does the job.
   class Application
 
-    ERRORCODE = {general: 1, usage: 2}
+    ERRORCODE = { general: 1, usage: 2 }
 
     def initialize
       begin
@@ -306,7 +306,6 @@ module Pdfmult
 
     # The main program.
     def run!
-
       # test for pdflatex installation
       unless @latex
         message = "seems not to be installed (you might try using the -l option)"
@@ -368,6 +367,7 @@ module Pdfmult
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin avoids gets/ARGV problem
         return reply == "y"  if /\A[yn]\Z/ =~ reply
+
         warn "Please answer `y' or `n'."
       end
     end
