@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 # == Name
 #
 # pdfmult - put multiple copies of a PDF page on one page
