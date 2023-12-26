@@ -23,9 +23,6 @@ Gem::Specification.new do |s|
 
   s.requirements << "pdflatex and the pdfpages package"
 
-  s.add_development_dependency("rake")
-  s.add_development_dependency("minitest")
-
   s.executables = ["pdfmult"]
   s.bindir = "bin"
 
@@ -36,6 +33,7 @@ Gem::Specification.new do |s|
   s.files = %w{
       README.md
       Rakefile
+      Gemfile
       pdfmult.gemspec
       pdfmult.h2m
     } +
