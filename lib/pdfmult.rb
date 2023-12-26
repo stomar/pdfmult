@@ -272,7 +272,7 @@ module Pdfmult
       command = "#{@binary} #{@file}"
       return {}  unless Application.command_available?(command)
 
-      info_array = `#{command}`.split(/\n/)
+      info_array = `#{command}`.split("\n")
 
       Hash[info_array.map {|line| line.split(/\s*:\s*/, 2) }]
     end
