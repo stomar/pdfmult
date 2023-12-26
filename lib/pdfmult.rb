@@ -20,29 +20,29 @@
 #
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 
-require 'optparse'
-require 'tempfile'
-require 'open3'
-require 'erb'
+require "optparse"
+require "tempfile"
+require "open3"
+require "erb"
 
 # This module contains the classes for the +pdfmult+ tool.
 module Pdfmult
 
-  PROGNAME  = 'pdfmult'
-  VERSION   = '1.3.2'
-  DATE      = '2013-10-27'
-  HOMEPAGE  = 'https://github.com/stomar/pdfmult/'
-  TAGLINE   = 'puts multiple copies of a PDF page on one page'
+  PROGNAME  = "pdfmult"
+  VERSION   = "1.3.2"
+  DATE      = "2013-10-27"
+  HOMEPAGE  = "https://github.com/stomar/pdfmult/"
+  TAGLINE   = "puts multiple copies of a PDF page on one page"
 
-  COPYRIGHT = <<-copyright.gsub(/^ +/, '')
+  COPYRIGHT = <<-copyright.gsub(/^ +/, "")
     Copyright (C) 2011-2018 Marcus Stollsteimer.
     License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
     This is free software: you are free to change and redistribute it.
     There is NO WARRANTY, to the extent permitted by law.
   copyright
 
-  PDFLATEX  = '/usr/bin/pdflatex'
-  KPSEWHICH = '/usr/bin/kpsewhich'
+  PDFLATEX  = "/usr/bin/pdflatex"
+  KPSEWHICH = "/usr/bin/kpsewhich"
 
   # Parser for the command line options.
   # The class method parse! does the job.
@@ -86,64 +86,64 @@ module Pdfmult
           and a LaTeX file is created instead of a PDF.
 
           Options:
-        }.gsub(/^ +/, '')
+        }.gsub(/^ +/, "")
 
         # process --version and --help first,
         # exit successfully (GNU Coding Standards)
-        opt.on_tail('-h', '--help', 'Print a brief help message and exit.') do
+        opt.on_tail("-h", "--help", "Print a brief help message and exit.") do
           puts opt_parser
           puts "\nReport bugs on the #{PROGNAME} home page: <#{HOMEPAGE}>"
           exit
         end
 
-        opt.on_tail('-v', '--version',
-                    'Print a brief version information and exit.') do
+        opt.on_tail("-v", "--version",
+                    "Print a brief version information and exit.") do
           puts "#{PROGNAME} #{VERSION}"
           puts COPYRIGHT
           exit
         end
 
-        opt.on('-n', '--number NUMBER', ['2', '4', '8', '9', '16'], Integer,
-               'Number of copies to put on one page: 2 (default), 4, 8, 9, 16.') do |n|
+        opt.on("-n", "--number NUMBER", ["2", "4", "8", "9", "16"], Integer,
+               "Number of copies to put on one page: 2 (default), 4, 8, 9, 16.") do |n|
           options[:number] = n
         end
 
-        opt.on('-f', '--[no-]force', 'Do not prompt before overwriting.') do |f|
+        opt.on("-f", "--[no-]force", "Do not prompt before overwriting.") do |f|
           options[:force] = f
         end
 
-        opt.on('-l', '--latex', 'Create a LaTeX file instead of a PDF file (default: file_2.tex).') do
+        opt.on("-l", "--latex", "Create a LaTeX file instead of a PDF file (default: file_2.tex).") do
           options[:latex] = true
         end
 
-        opt.on('-o', '--output FILE', String,
-               'Output file (default: file_2.pdf). Use - to output to stdout.') do |f|
+        opt.on("-o", "--output FILE", String,
+               "Output file (default: file_2.pdf). Use - to output to stdout.") do |f|
           options[:outfile] = f
         end
 
-        opt.on('-p', '--pages NUMBER', Integer,
-               'Number of pages to convert.',
+        opt.on("-p", "--pages NUMBER", Integer,
+               "Number of pages to convert.",
                "If given, #{PROGNAME} does not try to obtain the page count from the source PDF.") do |p|
           raise(OptionParser::InvalidArgument, p)  unless p > 0
           options[:pages] = p
         end
 
-        opt.on('-s', '--[no-]silent', 'Do not output progress information.') do |s|
+        opt.on("-s", "--[no-]silent", "Do not output progress information.") do |s|
           options[:silent] = s
         end
 
-        opt.separator ''
+        opt.separator ""
       end
       opt_parser.parse!(argv)
 
       # only input file should be left in argv
-      raise(ArgumentError, 'wrong number of arguments')  if (argv.size != 1 || argv[0].empty?)
+      raise(ArgumentError, "wrong number of arguments")  if (argv.size != 1 || argv[0].empty?)
 
       options[:infile] = argv.pop
 
       # set output file unless set by option
-      ext = options[:latex] ? 'tex' : 'pdf'
-      infile_without_ext = options[:infile].gsub(/(.pdf)\Z/, '')
+      ext = options[:latex] ? "tex" : "pdf"
+      infile_without_ext = options[:infile].gsub(/(.pdf)\Z/, "")
       options[:outfile] ||= "#{infile_without_ext}_#{options[:number].to_s}.#{ext}"
 
       options
@@ -160,11 +160,11 @@ module Pdfmult
     attr_reader :pages, :geometry
 
     GEOMETRY = {
-      2  => '2x1',
-      4  => '2x2',
-      8  => '4x2',
-      9  => '3x3',
-      16 => '4x4'
+      2  => "2x1",
+      4  => "2x2",
+      8  => "4x2",
+      9  => "3x3",
+      16 => "4x4"
     }
 
     def initialize(pages)
@@ -173,7 +173,7 @@ module Pdfmult
     end
 
     def landscape?
-      ['2x1', '4x2'].include?(geometry)
+      ["2x1", "4x2"].include?(geometry)
     end
   end
 
@@ -197,7 +197,7 @@ module Pdfmult
         \includepdf[pages={<%= pages %>},nup=<%= geometry %>]{<%= pdffile %>}%
       % end
       \end{document}
-    ).gsub(/\A\n/,'').gsub(/^ +/, '')
+    ).gsub(/\A\n/,"").gsub(/^ +/, "")
 
     # Initializes a LaTeXDocument instance.
     # Expects an argument hash with:
@@ -236,7 +236,7 @@ module Pdfmult
     def pages_strings
       pages = (1..page_count).to_a
 
-      pages.map {|page| ([page] * pages_per_sheet).join(',') }
+      pages.map {|page| ([page] * pages_per_sheet).join(",") }
     end
   end
 
@@ -248,7 +248,7 @@ module Pdfmult
   # else the attribute is set to +nil+.
   class PDFInfo
 
-    PDFINFOCMD = '/usr/bin/pdfinfo'
+    PDFINFOCMD = "/usr/bin/pdfinfo"
 
     # Returns the page count of the input file, or nil.
     attr_reader :page_count
@@ -260,7 +260,7 @@ module Pdfmult
       @file = file
       @binary = options[:pdfinfocmd] || PDFINFOCMD  # for unit tests
       infos = retrieve_infos
-      @page_count = infos['Pages'] && infos['Pages'].to_i
+      @page_count = infos["Pages"] && infos["Pages"].to_i
     end
 
     private
@@ -296,7 +296,7 @@ module Pdfmult
       end
       @infile = options[:infile]
       @outfile = options[:outfile]
-      @use_stdout = (@outfile == '-')
+      @use_stdout = (@outfile == "-")
       @silent = options[:silent]
       @force = options[:force]
       @latex = options[:latex]
@@ -309,14 +309,14 @@ module Pdfmult
 
       # test for pdflatex installation
       unless @latex
-        message = 'seems not to be installed (you might try using the -l option)'
+        message = "seems not to be installed (you might try using the -l option)"
         general_fail("`#{PDFLATEX}' #{message}")  unless self.class.command_available?("#{PDFLATEX} --version")
         general_fail("`pdfpages.sty' #{message}")  unless self.class.command_available?("#{KPSEWHICH} pdfpages.sty")
       end
 
       # test input file
       usage_fail("no such file: `#{@infile}'")  unless File.exist?(@infile)
-      usage_fail("specified input not of the type `file'")  unless File.ftype(@infile) == 'file'
+      usage_fail("specified input not of the type `file'")  unless File.ftype(@infile) == "file"
 
       # test for existing output file
       if !@use_stdout && !@force && File.exist?(@outfile)
@@ -336,10 +336,10 @@ module Pdfmult
       if @latex
         output = document.to_s
       else
-        Dir.mktmpdir('pdfmult') do |dir|
-          texfile = 'pdfmult.tex'
-          pdffile = 'pdfmult.pdf'
-          open("#{dir}/#{texfile}", 'w') {|f| f.write(document.to_s) }
+        Dir.mktmpdir("pdfmult") do |dir|
+          texfile = "pdfmult.tex"
+          pdffile = "pdfmult.pdf"
+          open("#{dir}/#{texfile}", "w") {|f| f.write(document.to_s) }
           command = "#{PDFLATEX} -output-directory #{dir} #{texfile}"
           Open3.popen3(command) do |stdin, stdout, stderr|
             stdout.each_line {|line| warn line.chomp }  unless @silent # redirect progress messages to stderr
@@ -350,7 +350,7 @@ module Pdfmult
       end
 
       # redirect stdout to output file
-      $stdout.reopen(@outfile, 'w')  unless @use_stdout
+      $stdout.reopen(@outfile, "w")  unless @use_stdout
 
       warn "Writing on #{@outfile}."  unless (@use_stdout || @silent)
       puts output
@@ -367,7 +367,7 @@ module Pdfmult
       loop do
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin avoids gets/ARGV problem
-        return reply == 'y'  if /\A[yn]\Z/ =~ reply
+        return reply == "y"  if /\A[yn]\Z/ =~ reply
         warn "Please answer `y' or `n'."
       end
     end

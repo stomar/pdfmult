@@ -1,5 +1,5 @@
-require 'minitest/autorun'
-require 'pdfmult'
+require "minitest/autorun"
+require "pdfmult"
 
 
 describe Pdfmult::LaTeXDocument do
@@ -8,9 +8,9 @@ describe Pdfmult::LaTeXDocument do
     @layout_class = Pdfmult::Layout
   end
 
-  it 'should return the expected LaTeX code for 4 pages' do
+  it "should return the expected LaTeX code for 4 pages" do
     args = {
-      :pdffile    => 'sample.pdf',
+      :pdffile    => "sample.pdf",
       :layout     => @layout_class.new(4),
       :page_count => 3
     }
@@ -20,9 +20,9 @@ describe Pdfmult::LaTeXDocument do
     _(document_lines.grep(/includepdf/).size).must_equal args[:page_count]
   end
 
-  it 'should return the expected LaTeX code for 8 pages' do
+  it "should return the expected LaTeX code for 8 pages" do
     args = {
-      :pdffile    => 'sample.pdf',
+      :pdffile    => "sample.pdf",
       :layout     => @layout_class.new(8),
       :page_count => 5
     }

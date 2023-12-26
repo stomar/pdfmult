@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'pdfmult'
+require "pdfmult"
 
 Pdfmult::Application.new.run!
