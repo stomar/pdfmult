@@ -274,7 +274,7 @@ module Pdfmult
 
       info_array = `#{command}`.split("\n")
 
-      Hash[info_array.map {|line| line.split(/\s*:\s*/, 2) }]
+      info_array.to_h {|line| line.split(/\s*:\s*/, 2) }
     end
 
     # Returns true if default +pdfinfo+ system tool is available (for unit tests).
