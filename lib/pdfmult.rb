@@ -398,6 +398,4 @@ end
 
 ### call main method only if called on command line
 
-if __FILE__ == $PROGRAM_NAME
-  Pdfmult::Application.new.run!
-end
+Pdfmult::Application.new.run!  if __FILE__ == $PROGRAM_NAME
