@@ -340,7 +340,7 @@ module Pdfmult
         Dir.mktmpdir("pdfmult") do |dir|
           texfile = "pdfmult.tex"
           pdffile = "pdfmult.pdf"
-          open("#{dir}/#{texfile}", "w") {|f| f.write(document.to_s) }
+          File.write("#{dir}/#{texfile}", document.to_s)
           command = "#{PDFLATEX} -output-directory #{dir} #{texfile}"
           Open3.popen3(command) do |_stdin, stdout, stderr|
             stdout.each_line {|line| warn line.chomp }  unless @silent # redirect progress messages to stderr
