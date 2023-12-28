@@ -342,7 +342,7 @@ module Pdfmult
           pdffile = "pdfmult.pdf"
           open("#{dir}/#{texfile}", "w") {|f| f.write(document.to_s) }
           command = "#{PDFLATEX} -output-directory #{dir} #{texfile}"
-          Open3.popen3(command) do |stdin, stdout, stderr|
+          Open3.popen3(command) do |_stdin, stdout, stderr|
             stdout.each_line {|line| warn line.chomp }  unless @silent # redirect progress messages to stderr
             stderr.read  # make sure all streams are read (and command has finished)
           end
