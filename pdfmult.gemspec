@@ -23,6 +23,8 @@ Gem::Specification.new do |s|
 
   s.license = "GPL-3.0"
 
+  s.required_ruby_version = ">= 3.1.0"
+
   s.requirements << "pdflatex and the pdfpages package"
 
   s.executables = ["pdfmult"]
