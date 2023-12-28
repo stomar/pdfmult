@@ -265,6 +265,11 @@ module Pdfmult
       @page_count = infos["Pages"]&.to_i
     end
 
+    # Returns true if default +pdfinfo+ system tool is available (for unit tests).
+    def self.infocmd_available?
+      Application.command_available?("#{PDFINFOCMD} -v")
+    end
+
     private
 
     # Tries to retrieve the PDF infos for the file; returns an info hash.
@@ -275,11 +280,6 @@ module Pdfmult
       info_array = `#{command}`.split("\n")
 
       info_array.to_h {|line| line.split(/\s*:\s*/, 2) }
-    end
-
-    # Returns true if default +pdfinfo+ system tool is available (for unit tests).
-    def self.infocmd_available?
-      Application.command_available?("#{PDFINFOCMD} -v")
     end
   end
 
@@ -357,6 +357,13 @@ module Pdfmult
       puts output
     end
 
+    # Tests silently whether the given system command is available.
+    #
+    # +command+ - command to test
+    def self.command_available?(command) # :nodoc:
+      !!system("#{command} >/dev/null 2>&1")
+    end
+
     private
 
     # Asks for yes or no (y/n).
@@ -385,13 +392,6 @@ module Pdfmult
       warn "#{PROGNAME}: #{message}"
       warn "Use `#{PROGNAME} --help' for valid options."
       exit ERRORCODE[:usage]
-    end
-
-    # Tests silently whether the given system command is available.
-    #
-    # +command+ - command to test
-    def self.command_available?(command) # :nodoc:
-      !!system("#{command} >/dev/null 2>&1")
     end
   end
 end
