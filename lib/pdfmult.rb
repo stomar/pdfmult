@@ -70,7 +70,8 @@ module Pdfmult
 
       opt_parser = OptionParser.new do |opt|
         opt.banner = "Usage: #{PROGNAME} [options] file"
-        opt.separator "
+        opt.separator ""
+        opt.separator <<~DESCRIPTION
           pdfmult is a command line tool that
           rearranges multiple copies of a PDF page (shrunken) on one page.
 
@@ -87,7 +88,7 @@ module Pdfmult
           and a LaTeX file is created instead of a PDF.
 
           Options:
-        ".gsub(/^ +/, "")
+        DESCRIPTION
 
         # process --version and --help first,
         # exit successfully (GNU Coding Standards)
@@ -189,17 +190,17 @@ module Pdfmult
 
     attr_reader :pdffile, :layout, :page_count
 
-    TEMPLATE = %q(
+    TEMPLATE = <<~'LATEX'
       \documentclass[<%= class_options %>]{article}
       \usepackage{pdfpages}
       \pagestyle{empty}
       \setlength{\parindent}{0pt}
       \begin{document}
       % pages_strings.each do |pages|
-        \includepdf[pages={<%= pages %>},nup=<%= geometry %>]{<%= pdffile %>}%
+      \includepdf[pages={<%= pages %>},nup=<%= geometry %>]{<%= pdffile %>}%
       % end
       \end{document}
-    ).gsub(/\A\n/, "").gsub(/^ +/, "")
+    LATEX
 
     # Initializes a LaTeXDocument instance.
     # Expects an argument hash with:
