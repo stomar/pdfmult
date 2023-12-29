@@ -146,7 +146,7 @@ module Pdfmult
 
       # set output file unless set by option
       ext = options[:latex] ? "tex" : "pdf"
-      infile_without_ext = options[:infile].gsub(/(.pdf)\Z/, "")
+      infile_without_ext = options[:infile].gsub(/\.pdf\z/, "")
       options[:outfile] ||= "#{infile_without_ext}_#{options[:number]}.#{ext}"
 
       options
@@ -376,7 +376,7 @@ module Pdfmult
       loop do
         $stderr.print "#{question} [y/n] "
         reply = $stdin.gets.chomp.downcase  # $stdin avoids gets/ARGV problem
-        return reply == "y"  if /\A[yn]\Z/ =~ reply
+        return reply == "y"  if /\A[yn]\z/ =~ reply
 
         warn "Please answer `y' or `n'."
       end
