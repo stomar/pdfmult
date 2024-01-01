@@ -146,7 +146,7 @@ module Pdfmult
 
       # set output file unless set by option
       ext = options[:latex] ? "tex" : "pdf"
-      infile_without_ext = options[:infile].gsub(/\.pdf\z/, "")
+      infile_without_ext = options[:infile].delete_suffix(".pdf")
       options[:outfile] ||= "#{infile_without_ext}_#{options[:number]}.#{ext}"
 
       options
